@@ -1,8 +1,10 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
 
-function App() {
+
+function App(props) {
   return (
     <div className="App">
       <header className="App-header">
@@ -26,6 +28,7 @@ function App() {
               referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
             });
             console.log(response);
+            console.log(props);
           }}
         >
           Call API
@@ -34,5 +37,12 @@ function App() {
     </div>
   );
 }
+const mapStateToProps = ({ sphinx }) => {
+  return {
+    sphinx,
+  }
+}
 
-export default App;
+export default connect(
+  mapStateToProps, {} 
+)(App);
