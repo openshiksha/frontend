@@ -1,24 +1,32 @@
 import React from 'react'
-import { Row, Button } from 'antd'
+import { Row, Col, Button } from 'antd'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-function QuestionCreator (props) {
+import SubpartTable from './question-creator/SubpartTable'
+import SubpartCreator from './question-creator/SubpartCreator'
+
+const QuestionCreator = (props) => {
+  const { subparts = [], subpartCreator = {} } = props.questionCreator
   return (
     <Row className='padding--sides width-100 background-offwhite'>
-      <p className='f24'>Question Creator</p>
-      <Button type=''> Submit Question </Button>
+      <Col span={24} >
+        <div className='f24 margin--bottom'>Question Creator</div>
+        <SubpartTable datasource={subparts} />
+        <Button className='margin--ends background-peach'> Submit Question </Button>
+        <SubpartCreator subpart={subpartCreator} />
+      </Col>
     </Row>
   )
 }
 
 QuestionCreator.propTypes = {
-  sphinx: PropTypes.object.isRequired
+  questionCreator: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ sphinx }) => {
+const mapStateToProps = ({ questionCreator }) => {
   return {
-    sphinx
+    questionCreator
   }
 }
 

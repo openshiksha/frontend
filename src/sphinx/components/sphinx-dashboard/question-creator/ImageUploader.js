@@ -11,9 +11,11 @@ function getBase64(file) {
 }
 
 class ImageUploader extends React.Component {
-
+  
+  //TODO: replace with action to change reducer
   handleCancel = () => this.setState({ previewVisible: false });
 
+  // TODO: replace with action to change reducer
   handlePreview = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -26,10 +28,11 @@ class ImageUploader extends React.Component {
     });
   };
 
+  // TODO: replace with action to change reducer
   handleChange = ({ fileList }) => this.setState({ fileList });
 
   render() {
-    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    const { previewVisible, previewImage, fileList, previewTitle } = this.props.imageList;
     const uploadButton = (
       <div>
         <PlusOutlined />
