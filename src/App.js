@@ -12,7 +12,7 @@ import SphinxBase from './sphinx/components/SphinxBase'
 
 const App = () => (
   <Router>
-    <div style={{ height: '100%' }}>
+    <div className='height-100'>
       <Switch>
         <Route path="/sphinx" component={SphinxBase} />
       </Switch>

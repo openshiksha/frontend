@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Row } from 'antd'
 import {
   Route,
@@ -13,7 +12,7 @@ import AssignmentCreator from './sphinx-dashboard/AssignmentCreator'
 
 function SphinxContent () {
   return (
-    <Row style={{ height: '100%', overflow: 'auto' }}>
+    <Row className='height-100 overflow-auto'>
       <Switch>
         <Route exact path="/sphinx/question" component={QuestionCreator} />
         <Route exact path="/sphinx/assignment" component={AssignmentCreator} />
@@ -22,10 +21,6 @@ function SphinxContent () {
       </Switch>
     </Row>
   )
-}
-
-SphinxContent.propTypes = {
-  sphinx: PropTypes.object.isRequired
 }
 
 export default SphinxContent

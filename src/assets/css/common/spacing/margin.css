@@ -130,28 +130,28 @@
 }
 
 
-.no-.margin--top {
+.no-margin--top {
   margin-top: 0px !important;
 }
 
-.no-.margin--right {
+.no-margin--right {
   margin-right: 0px !important;
 }
 
-.no-.margin--left {
+.no-margin--left {
   margin-left: 0px !important;
 }
 
-.no-.margin--bottom {
+.no-margin--bottom {
   margin-bottom: 0px !important;
 }
 
-.no-.margin--sides {
+.no-margin--sides {
   margin-right: 0px !important;
   margin-left: 0px !important;
 }
 
-.no-.margin--ends {
+.no-margin--ends {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
