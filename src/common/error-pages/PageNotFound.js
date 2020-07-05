@@ -4,7 +4,7 @@ import { Row, Col, Button } from 'antd'
 
 const PageNotFound = () => {
   return (
-    <Row style={{ marginTop: 60, textAlign: 'center' }}>
+    <Row style={{ marginTop: 60, textAlign: 'center', width: '100%' }}>
       <Col span={12} offset={6} >
         <h1 className='f48'> 404 </h1>
         <h2 className='f36'> PAGE NOT FOUND </h2>

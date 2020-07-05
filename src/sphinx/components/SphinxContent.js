@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Row } from 'antd'
 import {
-  BrowserRouter as Router,
   Route,
   Switch
 } from 'react-router-dom'
@@ -14,15 +13,13 @@ import AssignmentCreator from './sphinx-dashboard/AssignmentCreator'
 
 function SphinxContent () {
   return (
-    <Row className='background-peach f32 padding--sides' style={{ height: '100%', overflow: 'auto' }}>
-      <Router>
-        <Switch>
-          <Route path="/sphinx/dashboard" component={SphinxDashboard} />
-          <Route path="/sphinx/question" component={QuestionCreator} />
-          <Route path="/sphinx/assignment" component={AssignmentCreator} />
-          <Route render={() => <PageNotFound />} />
-        </Switch>
-      </Router>
+    <Row style={{ height: '100%', overflow: 'auto' }}>
+      <Switch>
+        <Route exact path="/sphinx/question" component={QuestionCreator} />
+        <Route exact path="/sphinx/assignment" component={AssignmentCreator} />
+        <Route path="/sphinx" component={SphinxDashboard} />
+        <Route render={() => <PageNotFound />} />
+      </Switch>
     </Row>
   )
 }

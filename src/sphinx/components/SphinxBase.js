@@ -18,6 +18,7 @@ function SphinxBase (props) {
           height: '100vh',
           position: 'fixed'
         }}
+        theme='light'
       >
         <SphinxSidebar />
       </Sider>
