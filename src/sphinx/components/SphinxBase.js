@@ -1,14 +1,30 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button } from 'antd'
+import { Layout } from 'antd'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+import SphinxSidebar from './SphinxSidebar'
+import SphinxContent from './SphinxContent'
+
+const { Sider, Content } = Layout
 
 function SphinxBase (props) {
   return (
-    <>
-      <Button type='primary'> Click me</Button>
-      <p>{props.sphinx.toString()}</p>
-    </>
+    <Layout style={{ minHeight: '100%' }}>
+      <Sider
+        width={250}
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed'
+        }}
+      >
+        <SphinxSidebar />
+      </Sider>
+      <Content style={{ marginLeft: 250 }}>
+        <SphinxContent />
+      </Content>
+    </Layout>
   )
 }
 
