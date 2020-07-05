@@ -12,14 +12,22 @@ function SphinxDashboard () {
       <Col
         span={12}
         className='background-black text-white center on-hover-light f48 padding-double--top'
+        onClick={() => {
+          window.location.href = '/sphinx/question'
+        }}
       >
         <p>Create a question </p>
-        <img src={questionMarkSrc} alt='assignment-list image' width={250} height={250} />
+        <img src={questionMarkSrc} alt='question-mark' width={250} height={250} />
       </Col>
-      <Col span={12}
-        className='background-white text-black center on-hover-light f48 padding-double--top'>
+      <Col
+        span={12}
+        className='background-white text-black center on-hover-light f48 padding-double--top'
+        onClick={() => {
+          window.location.href = '/sphinx/assignment'
+        }}
+      >
         <p>Create an Assignment </p>
-        <img src={assignmentListSrc} alt='assignment-list image' width={250} height={250} />
+        <img src={assignmentListSrc} alt='assignment-lis' width={250} height={250} />
       </Col>
     </Row>
   )

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 function AssignmentCreator (props) {
   return (
-    <Row>
+    <Row className='width-100 background-offwhite'>
       This is assignment creation
     </Row>
   )

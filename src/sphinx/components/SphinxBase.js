@@ -20,7 +20,7 @@ function SphinxBase () {
       >
         <SphinxSidebar />
       </Sider>
-      <Content style={{ marginLeft: 200 }}>
+      <Content theme='light' style={{ marginLeft: 200 }}>
         <SphinxContent />
       </Content>
     </Layout>
