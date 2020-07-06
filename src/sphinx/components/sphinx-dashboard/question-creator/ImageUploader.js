@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Upload, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -21,6 +23,9 @@ class ImageUploader extends React.Component {
       file.preview = await getBase64(file.originFileObj);
     }
 
+    console.log('preview called')
+    console.log(file)
+
     this.setState({
       previewImage: file.url || file.preview,
       previewVisible: true,
@@ -42,7 +47,10 @@ class ImageUploader extends React.Component {
     return (
       <div className="clearfix">
         <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action={(file) => Promise.resolve('Success').then((data) => {
+            console.log(file)
+          })
+          }
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
@@ -62,3 +70,10 @@ class ImageUploader extends React.Component {
     );
   }
 }
+
+ImageUploader.propTypes = {
+  imageList: PropTypes.object.isRequired,
+  imageType: PropTypes.string.isRequired
+}
+
+export default ImageUploader

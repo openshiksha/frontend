@@ -12,7 +12,7 @@ const QuestionCreator = (props) => {
     <Row className='padding--sides width-100 background-offwhite'>
       <Col span={24} >
         <div className='f24 margin--bottom'>Question Creator</div>
-        <SubpartTable datasource={subparts} />
+        <SubpartTable dataSource={subparts} />
         <Button className='margin--ends background-peach'> Submit Question </Button>
         <SubpartCreator subpart={subpartCreator} />
       </Col>

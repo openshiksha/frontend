@@ -1,4 +1,19 @@
 
+const variableBase = {
+  name: 'defaultName',
+  type: 'options',
+  range: {
+    rInclude: '',
+    rExclude: '',
+    step: 1
+  },
+  options: [],
+  fractions: {
+    numerator: '',
+    denominator: 1
+  }
+}
+
 const initialState = {
   questionCreator: {
     subpartCreator: {
@@ -6,7 +21,7 @@ const initialState = {
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
-        fileList: []
+        fileList: [{ uid: 'rc-upload-1594058525918-4', lastModified: 1593961857000, name: 'question.jpg', size: 98835, type: 'image/jpeg', percent: 0, originFileObj: { uid: 'rc-upload-1594058525918-4' }, status: 'removed', preview: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png' }]
       },
       hintImages: {
         previewVisible: false,
@@ -14,7 +29,7 @@ const initialState = {
         previewTitle: '',
         fileList: []
       },
-      SolutionImages: {
+      solutionImages: {
         previewVisible: false,
         previewImage: '',
         previewTitle: '',
@@ -25,7 +40,8 @@ const initialState = {
       hintText: '',
       solutionText: '',
       variablesNumber: 0,
-      templateType: 'Textual'
+      templateType: 'Textual',
+      variables: [variableBase, variableBase]
     },
     subparts: []
   }
