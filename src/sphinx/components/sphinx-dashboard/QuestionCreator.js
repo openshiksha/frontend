@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import SubpartTable from './question-creator/SubpartTable'
 import SubpartCreator from './question-creator/SubpartCreator'
+import { handleTestAction } from '../../actions'
 
 const QuestionCreator = (props) => {
   const { subparts = [], subpartCreator = {} } = props.questionCreator
@@ -13,7 +14,7 @@ const QuestionCreator = (props) => {
       <Col span={24} >
         <div className='f24 margin--bottom'>Question Creator</div>
         <SubpartTable dataSource={subparts} />
-        <Button className='margin--ends background-peach'> Submit Question </Button>
+        <Button className='margin--ends background-peach' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
         <SubpartCreator subpart={subpartCreator} />
       </Col>
     </Row>
@@ -21,7 +22,8 @@ const QuestionCreator = (props) => {
 }
 
 QuestionCreator.propTypes = {
-  questionCreator: PropTypes.object.isRequired
+  questionCreator: PropTypes.object.isRequired,
+  handleTestAction: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -31,5 +33,6 @@ const mapStateToProps = ({ questionCreator }) => {
 }
 
 export default connect(
-  mapStateToProps, {}
-)(QuestionCreator)
+  mapStateToProps, {
+    handleTestAction
+  })(QuestionCreator)

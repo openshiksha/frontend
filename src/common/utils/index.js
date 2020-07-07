@@ -49,3 +49,33 @@ const toUpperCaseStringForCamel = (match, group) => {
 }
 
 const camelCaseString = (str) => str.replace(/_(.)/g, toUpperCaseStringForCamel)
+
+export function snakeCaseKeys (data) {
+  if (Array.isArray(data)) {
+    throw Error('snakeCaseKeys doesn\'t support arrays for now')
+  }
+
+  return Object.keys(data).reduce((snakeCased, datum) => {
+    const snakedCasedKey = datum.replace(/([A-Z])/g, ($1) => {
+      return '_' + $1.toLowerCase()
+    })
+    snakeCased[snakedCasedKey] = data[datum]
+    return snakeCased
+  }, {})
+}
+
+export function getCookie (name) {
+  let cookieValue = null
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';')
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim()
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+        break
+      }
+    }
+  }
+  return cookieValue
+}
