@@ -15,3 +15,24 @@ export const handleTestAction = (test = 'blah') => ({
     }
   }
 })
+
+export const ON_CHANGE_SUBPART_CREATOR_FIELD = 'ON_CHANGE_SUBPART_CREATOR_FIELD'
+export const onChangeSubpartCreatorField = (changedField) => {
+  return (
+    {
+      type: ON_CHANGE_SUBPART_CREATOR_FIELD,
+      changedField
+    }
+  )
+}
+
+export const ON_CHANGE_VARIABLE_CREATOR_FIELD = 'ON_CHANGE_VARIABLE_CREATOR_FIELD'
+export const onChangeVariableCreatorField = (changedIndex, changedField) => {
+  return (
+    {
+      type: ON_CHANGE_VARIABLE_CREATOR_FIELD,
+      changedIndex,
+      changedField
+    }
+  )
+}

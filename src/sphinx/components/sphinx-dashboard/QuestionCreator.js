@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import SubpartTable from './question-creator/SubpartTable'
 import SubpartCreator from './question-creator/SubpartCreator'
-import { handleTestAction } from '../../actions'
+import { handleTestAction, onChangeSubpartCreatorField, onChangeVariableCreatorField } from '../../actions'
 
 const QuestionCreator = (props) => {
   const { subparts = [], subpartCreator = {} } = props.questionCreator
@@ -15,7 +15,10 @@ const QuestionCreator = (props) => {
         <div className='f24 margin--bottom'>Question Creator</div>
         <SubpartTable dataSource={subparts} />
         <Button className='margin--ends background-peach' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
-        <SubpartCreator subpart={subpartCreator} />
+        <SubpartCreator
+          onChangeSubpartCreatorField={(changedField) => props.onChangeSubpartCreatorField(changedField)}
+          onChangeVariableCreatorField={(changedIndex, changedField) => props.onChangeVariableCreatorField(changedIndex, changedField)}
+          subpart={subpartCreator} />
       </Col>
     </Row>
   )
@@ -23,7 +26,9 @@ const QuestionCreator = (props) => {
 
 QuestionCreator.propTypes = {
   questionCreator: PropTypes.object.isRequired,
-  handleTestAction: PropTypes.func.isRequired
+  handleTestAction: PropTypes.func.isRequired,
+  onChangeSubpartCreatorField: PropTypes.func.isRequired,
+  onChangeVariableCreatorField: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -34,5 +39,7 @@ const mapStateToProps = ({ questionCreator }) => {
 
 export default connect(
   mapStateToProps, {
-    handleTestAction
+    handleTestAction,
+    onChangeSubpartCreatorField,
+    onChangeVariableCreatorField
   })(QuestionCreator)

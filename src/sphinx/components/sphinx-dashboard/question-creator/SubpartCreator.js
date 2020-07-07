@@ -9,11 +9,25 @@ const { Option } = Select
 const { TextArea } = Input
 class SubpartCreator extends React.Component {
   onChange (key, value) {
-    console.log(key + value)
+    const changedField = {
+      [key]: value
+    }
+    this.props.onChangeSubpartCreatorField(changedField)
   }
 
   render () {
-    const { contentImages, solutionImages, hintImages, variables } = this.props.subpart
+    const {
+      contentImages,
+      solutionImages,
+      hintImages,
+      variables,
+      hintText,
+      solutionText,
+      contentText,
+      subpartIndex,
+      templateType,
+      variablesNumber
+    } = this.props.subpart
 
     return (
       <Row className='width-100 padding-double--bottom'>
@@ -21,16 +35,16 @@ class SubpartCreator extends React.Component {
           <div className='f18 margin--bottom'>Subpart Creator</div>
           <div>
             <span className='margin--right'>Subpart Index: </span>
-            <InputNumber min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('subpartIndex', value)} />
+            <InputNumber value={subpartIndex} min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('subpartIndex', value)} />
             <span className='margin--sides' > Template Type: </span>
-            <Select defaultValue="MCSAQ" style={{ width: 120 }} onChange={(value) => this.onChange('templateType', value)}>
+            <Select value={templateType} defaultValue="MCSAQ" style={{ width: 120 }} onChange={(value) => this.onChange('templateType', value)}>
               <Option value="MCMAQ">MCMAQ</Option>
               <Option value="MCSAQ">MCSAQ</Option>
               <Option value="textual">Textual</Option>
               <Option value="numerical">Numerical</Option>
             </Select>
             <span className='margin--sides'> No. of Variables: </span>
-            <Select defaultValue={0} style={{ width: 120 }} onChange={(value) => this.onChange('variablesNumber', value)}>
+            <Select value={variablesNumber} defaultValue={0} style={{ width: 120 }} onChange={(value) => this.onChange('variablesNumber', value)}>
               {
                 [...Array(21).keys()].map((value) => {
                   return (
@@ -42,7 +56,7 @@ class SubpartCreator extends React.Component {
           </div>
           <div>
             <span> Question Text: </span>
-            <TextArea row={4} onChange={(value) => this.onChange('contentText', value)} />
+            <TextArea row={4} value={contentText} onChange={(e) => this.onChange('contentText', e.target.value)}/>
           </div>
           <span > Question Images: </span>
 
@@ -52,7 +66,7 @@ class SubpartCreator extends React.Component {
           />
           <div>
             <span > Hint Text: </span>
-            <TextArea row={4} onChange={(value) => this.onChange('hintText', value)} />
+            <TextArea row={4} value={hintText} onChange={(e) => this.onChange('hintText', e.target.value)} />
           </div>
           <span > Hint Images: </span>
           <ImageUploader
@@ -61,7 +75,7 @@ class SubpartCreator extends React.Component {
           />
           <div>
             <span > Solution Text: </span>
-            <TextArea row={4} onChange={(value) => this.onChange('solutionText', value)} />
+            <TextArea row={4} value={solutionText} onChange={(e) => this.onChange('solutionText', e.target.value)} />
           </div>
           <span > Solution Images: </span>
           <ImageUploader
@@ -80,6 +94,7 @@ class SubpartCreator extends React.Component {
                   key={index}
                   variable={variable}
                   index={index}
+                  onChangeVariableCreatorField={(changedIndex, changedField) => this.props.onChangeVariableCreatorField(changedIndex, changedField)}
                 />
 
               )
@@ -92,7 +107,9 @@ class SubpartCreator extends React.Component {
 }
 
 SubpartCreator.propTypes = {
-  subpart: PropTypes.object.isRequired
+  subpart: PropTypes.object.isRequired,
+  onChangeSubpartCreatorField: PropTypes.func.isRequired,
+  onChangeVariableCreatorField: PropTypes.func.isRequired
 }
 
 export default SubpartCreator

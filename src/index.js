@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'development') {
   ))
 } else {
   store = createStore(reducer, composeEnhances(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk, getMiddleware, postMiddleware)
   ))
 }
 
