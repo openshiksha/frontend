@@ -6,14 +6,24 @@ import * as serviceWorker from './serviceWorker'
 import { createStore, compose, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import logger from 'redux-logger'
 
 import reducer from '../src/sphinx/reducers/index'
 
 const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-const store = createStore(reducer, composeEnhances(
-  applyMiddleware(thunk)
-))
+let store
+
+if (process.env.NODE_ENV === 'development') {
+  store = createStore(reducer, composeEnhances(
+    applyMiddleware(thunk),
+    applyMiddleware(logger)
+  ))
+} else {
+  store = createStore(reducer, composeEnhances(
+    applyMiddleware(thunk)
+  ))
+}
 
 const app = (
   <Provider store={store}>
