@@ -36,3 +36,34 @@ export const onChangeVariableCreatorField = (changedIndex, changedField) => {
     }
   )
 }
+
+export const HANDLE_CLOSE_PREVIEW_WINDOW = 'HANDLE_CLOSE_PREVIEW_WINDOW'
+export const handleClosePreviewWindow = () => {
+  return (
+    {
+      type: HANDLE_CLOSE_PREVIEW_WINDOW
+    }
+  )
+}
+
+export const ON_TRIGGER_IMAGE_PREVIEW = 'ON_TRIGGER_IMAGE_PREVIEW'
+export const onTriggerImagePreview = (filePreview, fileName) => {
+  return (
+    {
+      type: ON_TRIGGER_IMAGE_PREVIEW,
+      filePreview,
+      fileName
+    }
+  )
+}
+
+export const ON_CHANGE_IMAGE_LIST = 'ON_CHANGE_IMAGE_LIST'
+export const onChangeImageList = (imageList, imageType) => {
+  return (
+    {
+      type: ON_CHANGE_VARIABLE_CREATOR_FIELD,
+      imageList,
+      imageType
+    }
+  )
+}

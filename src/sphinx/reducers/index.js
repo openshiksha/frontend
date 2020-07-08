@@ -20,31 +20,19 @@ const variableBase = {
 const initialState = {
   questionCreator: {
     subpartCreator: {
-      contentImages: {
-        previewVisible: false,
-        previewImage: '',
-        previewTitle: '',
-        fileList: [{ uid: 'rc-upload-1594058525918-4', lastModified: 1593961857000, name: 'question.jpg', size: 98835, type: 'image/jpeg', percent: 0, originFileObj: { uid: 'rc-upload-1594058525918-4' }, status: 'removed', preview: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png' }]
-      },
-      hintImages: {
-        previewVisible: false,
-        previewImage: '',
-        previewTitle: '',
-        fileList: []
-      },
-      solutionImages: {
-        previewVisible: false,
-        previewImage: '',
-        previewTitle: '',
-        fileList: []
-      },
+      contentImages: [],
+      hintImages: [],
+      solutionImages: [],
       index: 0,
       contentText: '',
       hintText: '',
       solutionText: '',
       variablesNumber: 0,
       templateType: 'Textual',
-      variables: []
+      variables: [],
+      imagePreviewVisible: false,
+      previewImage: '',
+      imagePreviewTitle: ''
     },
     subparts: []
   }
@@ -91,6 +79,53 @@ const mainReducer = (state = initialState, action) => {
         }
       }
     }
+
+    case ActionTypes.ON_CHANGE_IMAGE_LIST : {
+      const { imageList, imageType } = action
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            [imageType]: imageList
+          }
+        }
+      }
+    }
+
+    case ActionTypes.ON_TRIGGER_IMAGE_PREVIEW: {
+      const {
+        filePreview: previewImage,
+        fileName: imagePreviewTitle
+      } = action
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            imagePreviewVisible: true,
+            previewImage,
+            imagePreviewTitle
+          }
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_CLOSE_PREVIEW_WINDOW: {
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            imagePreviewVisible: false
+          }
+        }
+      }
+    }
+
     default: {
       return state
     }

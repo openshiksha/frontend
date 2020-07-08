@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import ImageUploader from './ImageUploader'
 import VariableSelectorItem from './VariableSelectorItem'
+import ImagePreviewModal from './ImagePreviewModal'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -26,7 +27,10 @@ class SubpartCreator extends React.Component {
       contentText,
       subpartIndex,
       templateType,
-      variablesNumber
+      variablesNumber,
+      imagePreviewTitle,
+      imagePreviewVisible,
+      previewImage
     } = this.props.subpart
 
     return (
@@ -62,7 +66,9 @@ class SubpartCreator extends React.Component {
 
           <ImageUploader
             imageList={contentImages}
-            imageType={'content'}
+            imageType='contentImages'
+            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+            onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
           />
           <div>
             <span > Hint Text: </span>
@@ -71,7 +77,9 @@ class SubpartCreator extends React.Component {
           <span > Hint Images: </span>
           <ImageUploader
             imageList={hintImages}
-            imageType={'hint'}
+            imageType='hintImages'
+            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+            onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
           />
           <div>
             <span > Solution Text: </span>
@@ -80,7 +88,9 @@ class SubpartCreator extends React.Component {
           <span > Solution Images: </span>
           <ImageUploader
             imageList={solutionImages}
-            imageType={'solution'}
+            imageType='solutionImages'
+            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+            onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
           />
 
           <Button className='margin--top margin--right background-green text-white'> Add a Subpart </Button>
@@ -101,6 +111,12 @@ class SubpartCreator extends React.Component {
             })
           }
         </Col>
+        <ImagePreviewModal
+          previewTitle={imagePreviewTitle}
+          previewImage={previewImage}
+          previewVisible={imagePreviewVisible}
+          handleClosePreviewWindow={() => this.props.handleClosePreviewWindow()}
+        />
       </Row>
     )
   }
@@ -109,7 +125,10 @@ class SubpartCreator extends React.Component {
 SubpartCreator.propTypes = {
   subpart: PropTypes.object.isRequired,
   onChangeSubpartCreatorField: PropTypes.func.isRequired,
-  onChangeVariableCreatorField: PropTypes.func.isRequired
+  onChangeVariableCreatorField: PropTypes.func.isRequired,
+  onChangeImageList: PropTypes.func.isRequired,
+  handleClosePreviewWindow: PropTypes.func.isRequired,
+  onTriggerImagePreview: PropTypes.func.isRequired
 }
 
 export default SubpartCreator
