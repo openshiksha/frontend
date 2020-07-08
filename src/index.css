@@ -15,3 +15,7 @@ code {
 #sphinx_root{
   height: 100%;
 }
+
+.ant-upload-list-picture-card-container .ant-tooltip {
+  display: none !important;
+}

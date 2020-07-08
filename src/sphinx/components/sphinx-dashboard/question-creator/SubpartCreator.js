@@ -39,7 +39,7 @@ class SubpartCreator extends React.Component {
           <div className='f18 margin--bottom'>Subpart Creator</div>
           <div>
             <span className='margin--right'>Subpart Index: </span>
-            <InputNumber value={subpartIndex} min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('subpartIndex', value)} />
+            <InputNumber value={subpartIndex} min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('index', value)} />
             <span className='margin--sides' > Template Type: </span>
             <Select value={templateType} defaultValue="MCSAQ" style={{ width: 120 }} onChange={(value) => this.onChange('templateType', value)}>
               <Option value="MCMAQ">MCMAQ</Option>
@@ -69,6 +69,8 @@ class SubpartCreator extends React.Component {
             imageType='contentImages'
             onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
             onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
+            onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveImageFromImageList(removedFile, imageType)}
+
           />
           <div>
             <span > Hint Text: </span>
@@ -80,6 +82,8 @@ class SubpartCreator extends React.Component {
             imageType='hintImages'
             onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
             onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
+            onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveImageFromImageList(removedFile, imageType)}
+
           />
           <div>
             <span > Solution Text: </span>
@@ -91,9 +95,15 @@ class SubpartCreator extends React.Component {
             imageType='solutionImages'
             onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
             onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
+            onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveImageFromImageList(removedFile, imageType)}
           />
 
-          <Button className='margin--top margin--right background-green text-white'> Add a Subpart </Button>
+          <Button
+            onClick={() => this.props.handleAddSubpartToQuestion()}
+            className='margin--top margin--right background-green text-white'
+          >
+            Add a Subpart
+          </Button>
         </Col>
         <Col span={12} className='padding--sides padding-double--top' >
           <div className='strong margin--bottom'> Variable Selector </div>
@@ -128,7 +138,9 @@ SubpartCreator.propTypes = {
   onChangeVariableCreatorField: PropTypes.func.isRequired,
   onChangeImageList: PropTypes.func.isRequired,
   handleClosePreviewWindow: PropTypes.func.isRequired,
-  onTriggerImagePreview: PropTypes.func.isRequired
+  onTriggerImagePreview: PropTypes.func.isRequired,
+  onRemoveImageFromImageList: PropTypes.func.isRequired,
+  handleAddSubpartToQuestion: PropTypes.func.isRequired
 }
 
 export default SubpartCreator

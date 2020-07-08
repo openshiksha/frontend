@@ -34,7 +34,10 @@ const initialState = {
       previewImage: '',
       imagePreviewTitle: ''
     },
-    subparts: []
+    subparts: [],
+    tableSubparts: [],
+    questionError: '',
+    hasAddedSubpartSuccessfully: false
   }
 }
 
@@ -54,7 +57,8 @@ const mainReducer = (state = initialState, action) => {
           subpartCreator: {
             ...state.questionCreator.subpartCreator,
             ...changedField
-          }
+          },
+          questionError: ''
         }
       }
     }
@@ -82,14 +86,13 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_CHANGE_IMAGE_LIST : {
       const { imageList, imageType } = action
+      const subpartCreatorState = state.questionCreator.subpartCreator
+      subpartCreatorState[imageType] = imageList
       return {
         ...state,
         questionCreator: {
           ...state.questionCreator,
-          subpartCreator: {
-            ...state.questionCreator.subpartCreator,
-            [imageType]: imageList
-          }
+          subpartCreator: subpartCreatorState
         }
       }
     }
@@ -113,6 +116,50 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
+    case ActionTypes.HANDLE_ADD_SUBPART_TO_QUESTION: {
+      const oldSubparts = state.questionCreator.subparts
+      const addedSubpart = state.questionCreator.subpartCreator
+      // TODO: change this to a proper validator
+      const isSubpartValid = (oldSubparts.length === 0 && addedSubpart.index === 0) ||
+      (oldSubparts.length ? (oldSubparts[oldSubparts.length - 1].index === addedSubpart.index - 1) : false)
+
+      if (!isSubpartValid) {
+        return {
+          ...state,
+          questionCreator: {
+            ...state.questionCreator,
+            questionError: 'This is an invalid subpart index. Please start from 0 and go sequentially upwards'
+          }
+        }
+      }
+      oldSubparts.push(addedSubpart)
+
+      // required by ant design table layout
+      const subparts = oldSubparts
+      const tableSubparts = subparts.map((subpart, key) => {
+        const { index, contentText, hintText, solutionText, variablesNumber, templateType } = subpart
+        return {
+          index,
+          contentText,
+          hintText,
+          solutionText,
+          variablesNumber,
+          templateType,
+          key
+        }
+      })
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: initialState.questionCreator.subpartCreator,
+          subparts,
+          tableSubparts,
+          hasAddedSubpartSuccessfully: true
+        }
+      }
+    }
+
     case ActionTypes.HANDLE_CLOSE_PREVIEW_WINDOW: {
       return {
         ...state,
@@ -121,7 +168,37 @@ const mainReducer = (state = initialState, action) => {
           subpartCreator: {
             ...state.questionCreator.subpartCreator,
             imagePreviewVisible: false
-          }
+          },
+          questionError: '',
+          hasAddedSubpartSuccessfully: false
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_DELETE_SUBPART: {
+      const { subpart: deletedSubpart } = action
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subparts: state.questionCreator.subparts.filter((subpart) => subpart.index !== deletedSubpart.index),
+          tableSubparts: state.questionCreator.tableSubparts.filter((subpart) => subpart.index !== deletedSubpart.index)
+        }
+      }
+    }
+
+    case ActionTypes.ON_REMOVE_IMAGE_FROM_IMAGE_LIST: {
+      const { imageType, removedFile } = action
+      const subpartCreatorState = state.questionCreator.subpartCreator
+      const newImageList = state.questionCreator.subpartCreator[imageType].filter((file) => {
+        return file.uid !== removedFile.uid
+      })
+      subpartCreatorState[imageType] = newImageList
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: subpartCreatorState
         }
       }
     }

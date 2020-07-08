@@ -46,6 +46,17 @@ export const handleClosePreviewWindow = () => {
   )
 }
 
+export const ON_REMOVE_IMAGE_FROM_IMAGE_LIST = 'ON_REMOVE_IMAGE_FROM_IMAGE_LIST'
+export const onRemoveImageFromImageList = (removedFile, imageType) => {
+  return (
+    {
+      type: ON_REMOVE_IMAGE_FROM_IMAGE_LIST,
+      imageType,
+      removedFile
+    }
+  )
+}
+
 export const ON_TRIGGER_IMAGE_PREVIEW = 'ON_TRIGGER_IMAGE_PREVIEW'
 export const onTriggerImagePreview = (filePreview, fileName) => {
   return (
@@ -61,9 +72,28 @@ export const ON_CHANGE_IMAGE_LIST = 'ON_CHANGE_IMAGE_LIST'
 export const onChangeImageList = (imageList, imageType) => {
   return (
     {
-      type: ON_CHANGE_VARIABLE_CREATOR_FIELD,
+      type: ON_CHANGE_IMAGE_LIST,
       imageList,
       imageType
+    }
+  )
+}
+
+export const HANDLE_ADD_SUBPART_TO_QUESTION = 'HANDLE_ADD_SUBPART_TO_QUESTION'
+export const handleAddSubpartToQuestion = () => {
+  return (
+    {
+      type: HANDLE_ADD_SUBPART_TO_QUESTION
+    }
+  )
+}
+
+export const HANDLE_DELETE_SUBPART = 'HANDLE_DELETE_SUBPART'
+export const handleDeleteSubpart = (subpart) => {
+  return (
+    {
+      type: HANDLE_DELETE_SUBPART,
+      subpart
     }
   )
 }
