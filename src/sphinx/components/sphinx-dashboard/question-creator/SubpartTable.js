@@ -43,7 +43,7 @@ class SubpartTable extends React.PureComponent {
         key: 'action',
         // eslint-disable-next-line react/display-name
         render: (record) => (
-          <span onClick={() => this.props.handleDeleteSubpart(record)}> Delete </span>
+          <a href='#sphinx_root' onClick={() => this.props.handleDeleteSubpart(record)}> Delete </a>
         )
       }
     ]

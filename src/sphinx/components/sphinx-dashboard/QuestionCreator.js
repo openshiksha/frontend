@@ -29,7 +29,7 @@ const QuestionCreator = (props) => {
           onCancel={props.handleClosePreviewWindow}
         >
           {
-            !hasAddedSubpartSuccessfully
+            questionError
               ? <Alert
                 message='Error'
                 description={questionError}
@@ -37,18 +37,20 @@ const QuestionCreator = (props) => {
                 showicon
                 className='margin-double--top'
               />
-              : <Alert
-                message='Success'
-                description='You have successfully added the subpart to the question!'
-                type='success'
-                showicon
-                className='margin-double--top'
-              />
+              : hasAddedSubpartSuccessfully
+                ? <Alert
+                  message='Success'
+                  description='You have successfully added the subpart to the question!'
+                  type='success'
+                  showicon
+                  className='margin-double--top'
+                />
+                : null
           }
         </Modal>
         <SubpartTable
           dataSource={tableSubparts}
-          handleDeleteSubpart={(subpart) => this.props.handleDeleteSubpart(subpart)}
+          handleDeleteSubpart={(subpart) => props.handleDeleteSubpart(subpart)}
         />
         <Button className='margin--ends background-peach' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
         <SubpartCreator
