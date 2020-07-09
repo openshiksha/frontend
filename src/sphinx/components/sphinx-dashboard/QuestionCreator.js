@@ -13,34 +13,35 @@ import {
   onTriggerImagePreview,
   onChangeImageList,
   onRemoveImageFromImageList,
-  handleAddSubpartToQuestion,
-  handleDeleteSubpart
+  handleAddorSaveSubpartToQuestion,
+  handleDeleteSubpart,
+  handleEditSubpart
 } from '../../actions'
 
 const QuestionCreator = (props) => {
-  const { tableSubparts = [], subpartCreator = {}, questionError, hasAddedSubpartSuccessfully } = props.questionCreator
+  const { tableSubparts = [], subpartCreator = {}, questionErrorText, questionSuccessText, editMode } = props.questionCreator
   return (
     <Row className='padding--sides width-100 background-offwhite'>
       <Col span={24} >
         <div className='f24 margin--bottom'>Question Creator</div>
         <Modal
-          visible={questionError.length || hasAddedSubpartSuccessfully }
+          visible={questionErrorText.length || questionSuccessText.length}
           footer={null}
           onCancel={props.handleClosePreviewWindow}
         >
           {
-            questionError
+            questionErrorText
               ? <Alert
                 message='Error'
-                description={questionError}
+                description={questionErrorText}
                 type='error'
                 showicon
                 className='margin-double--top'
               />
-              : hasAddedSubpartSuccessfully
+              : questionSuccessText
                 ? <Alert
                   message='Success'
-                  description='You have successfully added the subpart to the question!'
+                  description={questionSuccessText}
                   type='success'
                   showicon
                   className='margin-double--top'
@@ -51,16 +52,18 @@ const QuestionCreator = (props) => {
         <SubpartTable
           dataSource={tableSubparts}
           handleDeleteSubpart={(subpart) => props.handleDeleteSubpart(subpart)}
+          handleEditSubpart={(subpart) => props.handleEditSubpart(subpart)}
         />
         <Button className='margin--ends background-peach' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
         <SubpartCreator
+          editMode={editMode}
           onChangeSubpartCreatorField={(changedField) => props.onChangeSubpartCreatorField(changedField)}
           onChangeVariableCreatorField={(changedIndex, changedField) => props.onChangeVariableCreatorField(changedIndex, changedField)}
           handleClosePreviewWindow={() => props.handleClosePreviewWindow()}
           onTriggerImagePreview={(filePreview, fileName) => props.onTriggerImagePreview(filePreview, fileName)}
           onChangeImageList={(imageList, imageType) => props.onChangeImageList(imageList, imageType)}
           onRemoveImageFromImageList={(removedFile, imageType) => props.onRemoveImageFromImageList(removedFile, imageType)}
-          handleAddSubpartToQuestion={() => props.handleAddSubpartToQuestion()}
+          handleAddorSaveSubpartToQuestion={() => props.handleAddorSaveSubpartToQuestion()}
           subpart={subpartCreator} />
       </Col>
     </Row>
@@ -76,8 +79,9 @@ QuestionCreator.propTypes = {
   onTriggerImagePreview: PropTypes.func.isRequired,
   onChangeImageList: PropTypes.func.isRequired,
   onRemoveImageFromImageList: PropTypes.func.isRequired,
-  handleAddSubpartToQuestion: PropTypes.func.isRequired,
-  handleDeleteSubpart: PropTypes.func.isRequired
+  handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
+  handleDeleteSubpart: PropTypes.func.isRequired,
+  handleEditSubpart: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -95,6 +99,7 @@ export default connect(
     onTriggerImagePreview,
     onChangeImageList,
     onRemoveImageFromImageList,
-    handleAddSubpartToQuestion,
-    handleDeleteSubpart
+    handleAddorSaveSubpartToQuestion,
+    handleDeleteSubpart,
+    handleEditSubpart
   })(QuestionCreator)

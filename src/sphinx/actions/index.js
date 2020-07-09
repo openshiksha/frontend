@@ -79,11 +79,11 @@ export const onChangeImageList = (imageList, imageType) => {
   )
 }
 
-export const HANDLE_ADD_SUBPART_TO_QUESTION = 'HANDLE_ADD_SUBPART_TO_QUESTION'
-export const handleAddSubpartToQuestion = () => {
+export const HANDLE_ADD_OR_SAVE_SUBPART_TO_QUESTION = 'HANDLE_ADD_OR_SAVE_SUBPART_TO_QUESTION'
+export const handleAddorSaveSubpartToQuestion = () => {
   return (
     {
-      type: HANDLE_ADD_SUBPART_TO_QUESTION
+      type: HANDLE_ADD_OR_SAVE_SUBPART_TO_QUESTION
     }
   )
 }
@@ -93,6 +93,16 @@ export const handleDeleteSubpart = (subpart) => {
   return (
     {
       type: HANDLE_DELETE_SUBPART,
+      subpart
+    }
+  )
+}
+
+export const HANDLE_EDIT_SUBPART = 'HANDLE_EDIT_SUBPART'
+export const handleEditSubpart = (subpart) => {
+  return (
+    {
+      type: HANDLE_EDIT_SUBPART,
       subpart
     }
   )

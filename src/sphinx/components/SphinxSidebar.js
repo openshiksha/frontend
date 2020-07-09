@@ -2,7 +2,6 @@ import React from 'react'
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import {
-  UserAddOutlined,
   QuestionCircleOutlined,
   OrderedListOutlined
 } from '@ant-design/icons'
@@ -17,9 +16,8 @@ function SphinxSidebar () {
       </div>
       <p className='f24 strong center no-margin--bottom padding-half--sides'> Openshiksha Sphinx</p>
       <Menu theme='light' defaultSelectedKeys={['1']} >
-        <Menu.Item key="1"><Link to='/sphinx/dashboard'> <UserAddOutlined /> Dashboard </Link> </Menu.Item>
-        <Menu.Item key="2"><Link to='/sphinx/question'> <QuestionCircleOutlined /> Create a Question </Link></Menu.Item>
-        <Menu.Item key="3"><Link to='/sphinx/assignment'> <OrderedListOutlined /> Create an Assignment List </Link></Menu.Item>
+        <Menu.Item key="1"><Link to='/sphinx/question'> <QuestionCircleOutlined /> Create a Question </Link></Menu.Item>
+        <Menu.Item key="2"><Link to='/sphinx/assignment'> <OrderedListOutlined /> Create an Assignment List </Link></Menu.Item>
       </Menu>
     </>
   )

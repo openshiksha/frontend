@@ -36,8 +36,9 @@ const initialState = {
     },
     subparts: [],
     tableSubparts: [],
-    questionError: '',
-    hasAddedSubpartSuccessfully: false
+    questionErrorText: '',
+    questionSuccessText: '',
+    editMode: false
   }
 }
 
@@ -58,7 +59,8 @@ const mainReducer = (state = initialState, action) => {
             ...state.questionCreator.subpartCreator,
             ...changedField
           },
-          questionError: ''
+          questionErrorText: '',
+          questionSuccessText: ''
         }
       }
     }
@@ -116,23 +118,28 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
-    case ActionTypes.HANDLE_ADD_SUBPART_TO_QUESTION: {
+    case ActionTypes.HANDLE_ADD_OR_SAVE_SUBPART_TO_QUESTION: {
       const oldSubparts = state.questionCreator.subparts
       const addedSubpart = state.questionCreator.subpartCreator
+      const isEditing = state.questionCreator.editMode
+      if (isEditing) {
+        oldSubparts[addedSubpart.index] = addedSubpart
+      } else {
       // TODO: change this to a proper validator
-      const isSubpartValid = (oldSubparts.length === 0 && addedSubpart.index === 0) ||
-      (oldSubparts.length ? (oldSubparts[oldSubparts.length - 1].index === addedSubpart.index - 1) : false)
+        const isSubpartValid = (oldSubparts.length === 0 && addedSubpart.index === 0) ||
+        (oldSubparts.length ? (oldSubparts[oldSubparts.length - 1].index === addedSubpart.index - 1) : false)
 
-      if (!isSubpartValid) {
-        return {
-          ...state,
-          questionCreator: {
-            ...state.questionCreator,
-            questionError: 'This is an invalid subpart index. Please start from 0 and go sequentially upwards'
+        if (!isSubpartValid) {
+          return {
+            ...state,
+            questionCreator: {
+              ...state.questionCreator,
+              questionErrorText: 'This is an invalid subpart index. Please start from 0 and go sequentially upwards'
+            }
           }
         }
+        oldSubparts.push(addedSubpart)
       }
-      oldSubparts.push(addedSubpart)
 
       // required by ant design table layout
       const subparts = oldSubparts
@@ -155,7 +162,8 @@ const mainReducer = (state = initialState, action) => {
           subpartCreator: initialState.questionCreator.subpartCreator,
           subparts,
           tableSubparts,
-          hasAddedSubpartSuccessfully: true
+          questionSuccessText: isEditing ? 'You have successfully edited the subpart' : 'You have successfully added the subpart to the question',
+          editMode: false
         }
       }
     }
@@ -169,8 +177,8 @@ const mainReducer = (state = initialState, action) => {
             ...state.questionCreator.subpartCreator,
             imagePreviewVisible: false
           },
-          questionError: '',
-          hasAddedSubpartSuccessfully: false
+          questionErrorText: '',
+          questionSuccessText: ''
         }
       }
     }
@@ -183,6 +191,20 @@ const mainReducer = (state = initialState, action) => {
           ...state.questionCreator,
           subparts: state.questionCreator.subparts.filter((subpart) => subpart.index !== deletedSubpart.index),
           tableSubparts: state.questionCreator.tableSubparts.filter((subpart) => subpart.index !== deletedSubpart.index)
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_EDIT_SUBPART: {
+      const { subpart } = action
+
+      const editedSubpart = state.questionCreator.subparts[subpart.index]
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          editMode: true,
+          subpartCreator: editedSubpart
         }
       }
     }

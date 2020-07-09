@@ -39,11 +39,17 @@ class SubpartTable extends React.PureComponent {
         key: 'templateType'
       },
       {
-        title: 'Action',
         key: 'action',
         // eslint-disable-next-line react/display-name
         render: (record) => (
           <a href='#sphinx_root' onClick={() => this.props.handleDeleteSubpart(record)}> Delete </a>
+        )
+      },
+      {
+        key: 'action-edit',
+        // eslint-disable-next-line react/display-name
+        render: (record) => (
+          <a href='#sphinx_root' onClick={() => this.props.handleEditSubpart(record)}> Edit </a>
         )
       }
     ]
@@ -58,7 +64,8 @@ class SubpartTable extends React.PureComponent {
 
 SubpartTable.propTypes = {
   dataSource: PropTypes.array.isRequired,
-  handleDeleteSubpart: PropTypes.func.isRequired
+  handleDeleteSubpart: PropTypes.func.isRequired,
+  handleEditSubpart: PropTypes.func.isRequired
 }
 
 export default SubpartTable

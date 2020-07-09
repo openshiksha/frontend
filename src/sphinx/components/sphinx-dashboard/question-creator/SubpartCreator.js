@@ -25,7 +25,7 @@ class SubpartCreator extends React.Component {
       hintText,
       solutionText,
       contentText,
-      subpartIndex,
+      index,
       templateType,
       variablesNumber,
       imagePreviewTitle,
@@ -33,13 +33,15 @@ class SubpartCreator extends React.Component {
       previewImage
     } = this.props.subpart
 
+    const isEditing = this.props.editMode
+
     return (
       <Row className='width-100 padding-double--bottom'>
         <Col span={12} >
           <div className='f18 margin--bottom'>Subpart Creator</div>
           <div>
             <span className='margin--right'>Subpart Index: </span>
-            <InputNumber value={subpartIndex} min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('index', value)} />
+            <InputNumber disabled={isEditing} value={index} min={0} max={10} defaultValue={0} onChange={(value) => this.onChange('index', value)} />
             <span className='margin--sides' > Template Type: </span>
             <Select value={templateType} defaultValue="MCSAQ" style={{ width: 120 }} onChange={(value) => this.onChange('templateType', value)}>
               <Option value="MCMAQ">MCMAQ</Option>
@@ -99,10 +101,10 @@ class SubpartCreator extends React.Component {
           />
 
           <Button
-            onClick={() => this.props.handleAddSubpartToQuestion()}
+            onClick={() => this.props.handleAddorSaveSubpartToQuestion()}
             className='margin--top margin--right background-green text-white'
           >
-            Add a Subpart
+            {isEditing ? <span>Save Subpart</span> : <span>Add Subpart</span> }
           </Button>
         </Col>
         <Col span={12} className='padding--sides padding-double--top' >
@@ -140,7 +142,8 @@ SubpartCreator.propTypes = {
   handleClosePreviewWindow: PropTypes.func.isRequired,
   onTriggerImagePreview: PropTypes.func.isRequired,
   onRemoveImageFromImageList: PropTypes.func.isRequired,
-  handleAddSubpartToQuestion: PropTypes.func.isRequired
+  handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
+  editMode: PropTypes.bool.isRequired
 }
 
 export default SubpartCreator
