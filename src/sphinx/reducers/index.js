@@ -17,6 +17,11 @@ const variableBase = {
   }
 }
 
+const MCQAnswerBase = {
+  text: '',
+  images: []
+}
+
 const initialState = {
   questionCreator: {
     subpartCreator: {
@@ -32,13 +37,34 @@ const initialState = {
       variables: [],
       imagePreviewVisible: false,
       previewImage: '',
-      imagePreviewTitle: ''
+      imagePreviewTitle: '',
+      correctAnswer: {
+        MCSAQ: {
+          correct: MCQAnswerBase,
+          incorrectNumber: 1,
+          incorrect: [{ ...MCQAnswerBase }]
+        },
+        MCMAQ: {
+          incorrectNumber: 1,
+          incorrect: [{ ...MCQAnswerBase }],
+          correctNumber: 1,
+          correct: [{ ...MCQAnswerBase }]
+        },
+        textual: '',
+        numerical: {
+          text: '',
+          tolerance: 0.05,
+          unit: ''
+        }
+      }
     },
     subparts: [],
     tableSubparts: [],
     questionErrorText: '',
     questionSuccessText: '',
-    editMode: false
+    editMode: false,
+    previewType: '',
+    subpartPreview: {}
   }
 }
 
@@ -51,6 +77,7 @@ const mainReducer = (state = initialState, action) => {
       if (_.has(changedField, 'variablesNumber')) {
         changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
       }
+
       return {
         ...state,
         questionCreator: {
@@ -60,7 +87,33 @@ const mainReducer = (state = initialState, action) => {
             ...changedField
           },
           questionErrorText: '',
-          questionSuccessText: ''
+          questionSuccessText: '',
+          previewType: '',
+          subpartPreview: {}
+        }
+      }
+    }
+
+    case ActionTypes.ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD: {
+      const { changedField } = action
+
+      // special case to populate variables field
+      if (_.has(changedField, 'variablesNumber')) {
+        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
+      }
+
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            ...changedField
+          },
+          questionErrorText: '',
+          questionSuccessText: '',
+          previewType: '',
+          subpartPreview: {}
         }
       }
     }
@@ -178,7 +231,9 @@ const mainReducer = (state = initialState, action) => {
             imagePreviewVisible: false
           },
           questionErrorText: '',
-          questionSuccessText: ''
+          questionSuccessText: '',
+          subpartPreview: {},
+          previewType: ''
         }
       }
     }
@@ -205,6 +260,20 @@ const mainReducer = (state = initialState, action) => {
           ...state.questionCreator,
           editMode: true,
           subpartCreator: editedSubpart
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_SHOW_QUESTION_PREVIEW: {
+      const { previewType } = action
+
+      const subpartPreview = state.questionCreator.subpartCreator
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          previewType,
+          subpartPreview
         }
       }
     }

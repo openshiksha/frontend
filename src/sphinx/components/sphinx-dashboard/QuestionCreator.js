@@ -1,10 +1,12 @@
 import React from 'react'
-import { Row, Col, Button, Alert, Modal } from 'antd'
+import { Row, Col, Button, Modal, Card } from 'antd'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import SubpartTable from './question-creator/SubpartTable'
 import SubpartCreator from './question-creator/SubpartCreator'
+import QuestionAlerts from './question-creator/QuestionAlerts'
+import SubpartPreview from './question-creator/SubpartPreview'
 import {
   handleTestAction,
   onChangeSubpartCreatorField,
@@ -15,46 +17,53 @@ import {
   onRemoveImageFromImageList,
   handleAddorSaveSubpartToQuestion,
   handleDeleteSubpart,
-  handleEditSubpart
+  handleEditSubpart,
+  handleShowQuestionPreview
 } from '../../actions'
 
 const QuestionCreator = (props) => {
-  const { tableSubparts = [], subpartCreator = {}, questionErrorText, questionSuccessText, editMode } = props.questionCreator
+  const { tableSubparts = [], subpartCreator = {}, questionErrorText, questionSuccessText, editMode, previewType, subparts = [], subpartPreview } = props.questionCreator
+  const showQuestionAlerts = (questionErrorText.length || questionSuccessText.length)
   return (
     <Row className='padding--sides width-100 background-offwhite'>
       <Col span={24} >
         <div className='f24 margin--bottom'>Question Creator</div>
         <Modal
-          visible={questionErrorText.length || questionSuccessText.length}
+          visible={showQuestionAlerts || previewType}
           footer={null}
+          width={previewType ? 1000 : 500}
           onCancel={props.handleClosePreviewWindow}
         >
           {
-            questionErrorText
-              ? <Alert
-                message='Error'
-                description={questionErrorText}
-                type='error'
-                showicon
-                className='margin-double--top'
+            showQuestionAlerts
+              ? <QuestionAlerts
+                questionSuccessText={questionSuccessText}
+                questionErrorText={questionErrorText}
               />
-              : questionSuccessText
-                ? <Alert
-                  message='Success'
-                  description={questionSuccessText}
-                  type='success'
-                  showicon
-                  className='margin-double--top'
-                />
-                : null
+              : null
           }
+          {
+            previewType
+              ? previewType === 'subpart'
+                ? <SubpartPreview
+                  subpartPreview ={subpartPreview}
+                />
+                : <Card title={'Question Preview'} className='margin-double--top' >
+                  {
+                    subparts.map((subpart, index) => {
+                      return (<SubpartPreview
+                        key={index}
+                        subpartPreview={subpart}
+                        isInner={true}
+                      />)
+                    })
+                  }
+                </Card>
+              : null
+
+          }
+
         </Modal>
-        <SubpartTable
-          dataSource={tableSubparts}
-          handleDeleteSubpart={(subpart) => props.handleDeleteSubpart(subpart)}
-          handleEditSubpart={(subpart) => props.handleEditSubpart(subpart)}
-        />
-        <Button className='margin--ends background-peach' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
         <SubpartCreator
           editMode={editMode}
           onChangeSubpartCreatorField={(changedField) => props.onChangeSubpartCreatorField(changedField)}
@@ -64,7 +73,16 @@ const QuestionCreator = (props) => {
           onChangeImageList={(imageList, imageType) => props.onChangeImageList(imageList, imageType)}
           onRemoveImageFromImageList={(removedFile, imageType) => props.onRemoveImageFromImageList(removedFile, imageType)}
           handleAddorSaveSubpartToQuestion={() => props.handleAddorSaveSubpartToQuestion()}
-          subpart={subpartCreator} />
+          handleShowQuestionPreview={(previewType) => props.handleShowQuestionPreview(previewType)}
+          subpart={subpartCreator}
+        />
+        <SubpartTable
+          dataSource={tableSubparts}
+          handleDeleteSubpart={(subpart) => props.handleDeleteSubpart(subpart)}
+          handleEditSubpart={(subpart) => props.handleEditSubpart(subpart)}
+        />
+        <Button className='margin--ends background-peach' onClick={() => props.handleShowQuestionPreview()}> Preview Question </Button>
+        <Button className='margin--sides background-green text-white' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
       </Col>
     </Row>
   )
@@ -81,7 +99,8 @@ QuestionCreator.propTypes = {
   onRemoveImageFromImageList: PropTypes.func.isRequired,
   handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
   handleDeleteSubpart: PropTypes.func.isRequired,
-  handleEditSubpart: PropTypes.func.isRequired
+  handleEditSubpart: PropTypes.func.isRequired,
+  handleShowQuestionPreview: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -101,5 +120,6 @@ export default connect(
     onRemoveImageFromImageList,
     handleAddorSaveSubpartToQuestion,
     handleDeleteSubpart,
-    handleEditSubpart
+    handleEditSubpart,
+    handleShowQuestionPreview
   })(QuestionCreator)

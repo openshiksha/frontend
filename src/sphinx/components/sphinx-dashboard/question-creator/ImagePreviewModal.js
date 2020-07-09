@@ -12,7 +12,7 @@ const ImagePreviewModal = (props) => {
       footer={null}
       onCancel={props.handleClosePreviewWindow}
     >
-      <img alt="example" style={{ width: '100%' }} src={previewImage} />
+      <img alt="preview" style={{ width: '100%' }} src={previewImage} />
     </Modal>
   )
 }

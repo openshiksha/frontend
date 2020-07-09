@@ -37,6 +37,27 @@ export const onChangeVariableCreatorField = (changedIndex, changedField) => {
   )
 }
 
+export const ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD = 'ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD'
+export const onchangeSubpartAnswerSelectionField = (changedIndex, changedField) => {
+  return (
+    {
+      type: ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD,
+      changedField
+    }
+  )
+}
+
+export const ON_CHANGE_MCQ_FIELD = 'ON_CHANGE_VARIABLE_CREATOR_FIELD'
+export const onChangeMCQField = (changedIndex, changedField) => {
+  return (
+    {
+      type: ON_CHANGE_VARIABLE_CREATOR_FIELD,
+      changedIndex,
+      changedField
+    }
+  )
+}
+
 export const HANDLE_CLOSE_PREVIEW_WINDOW = 'HANDLE_CLOSE_PREVIEW_WINDOW'
 export const handleClosePreviewWindow = () => {
   return (
@@ -104,6 +125,16 @@ export const handleEditSubpart = (subpart) => {
     {
       type: HANDLE_EDIT_SUBPART,
       subpart
+    }
+  )
+}
+
+export const HANDLE_SHOW_QUESTION_PREVIEW = 'HANDLE_SHOW_QUESTION_PREVIEW'
+export const handleShowQuestionPreview = (previewType = 'question') => {
+  return (
+    {
+      type: HANDLE_SHOW_QUESTION_PREVIEW,
+      previewType
     }
   )
 }

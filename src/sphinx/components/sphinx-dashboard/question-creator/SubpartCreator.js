@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import ImageUploader from './ImageUploader'
 import VariableSelectorItem from './VariableSelectorItem'
 import ImagePreviewModal from './ImagePreviewModal'
+// import AnswerSelector from './AnswerSelector'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -99,7 +100,12 @@ class SubpartCreator extends React.Component {
             onChangeImageList={(imageList, imageType) => this.props.onChangeImageList(imageList, imageType)}
             onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveImageFromImageList(removedFile, imageType)}
           />
-
+          <Button
+            onClick={() => this.props.handleShowQuestionPreview('subpart')}
+            className='margin--top margin--right background-peach'
+          >
+            Preview Subpart
+          </Button>
           <Button
             onClick={() => this.props.handleAddorSaveSubpartToQuestion()}
             className='margin--top margin--right background-green text-white'
@@ -122,6 +128,7 @@ class SubpartCreator extends React.Component {
               )
             })
           }
+          <div className='strong margin--ends'> Answer Selector </div>
         </Col>
         <ImagePreviewModal
           previewTitle={imagePreviewTitle}
@@ -143,6 +150,7 @@ SubpartCreator.propTypes = {
   onTriggerImagePreview: PropTypes.func.isRequired,
   onRemoveImageFromImageList: PropTypes.func.isRequired,
   handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
+  handleShowQuestionPreview: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired
 }
 

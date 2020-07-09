@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 import { Upload } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
-import { getBase64 } from '../../../../common/utils'
-
 class ImageUploader extends React.Component {
   async handlePreview (file) {
-    const filePreview = await getBase64(file.originFileObj)
+    const filePreview = file.thumbUrl
     const fileName = file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
     this.props.onTriggerImagePreview(filePreview, fileName)
   };
