@@ -5,43 +5,6 @@ import PropTypes from 'prop-types'
 const { Panel } = Collapse
 const { Option } = Select
 
-const renderAddedtypeInfo = (variable) => {
-  switch (variable.type) {
-    case 'range': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Range to Include. Eg:15 or -20,20: </span>
-          <Input className='margin-half--bottom' value={variable?.range?.rinclude} onChange={(e) => this.onChange('rInclude', e.target.value, 'range')}/>
-          <span className='margin-half--bottom' > Decimal Step. Eg: 2 =&gt; step of 0.01 (optional): </span>
-          <Input className='margin-half--bottom' value={variable?.range?.step} onChange={(e) => this.onChange('step', e.target.value, 'range')} />
-          <span className='margin-half--bottom' > Range to Exclude. Eg:0 or -5,5 (optional): </span>
-          <Input className='margin-half--bottom' value={variable?.range?.rExclude} onChange={(e) => this.onChange('rExclude', e.target.value, 'range')} />
-        </div>
-      )
-    }
-    case 'options': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Options separated by commas. Eg:1,2,4,1: </span>
-          <Input className='margin-half--bottom' value={variable?.options} onChange={(e) => this.onChange('options', e.target.value)} />
-        </div>
-      )
-    }
-    case 'fraction': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Numerator - Enter an integer range (eg:1,20): </span>
-          <Input className='margin-half--bottom' value={variable?.fractions?.numerator} onChange={(e) => this.onChange('numerator', e.target.value, 'fractions')} />
-          <span className='margin-half--bottom' > Denominator - Enter an integer range (eg:1,20): </span>
-          <Input className='margin-half--bottom' value={variable?.fractions?.denominator} onChange={(e) => this.onChange('denominator', e.target.value, 'fractions')} />
-        </div>
-      )
-    }
-    default:
-      return null
-  }
-}
-
 class VariableSelectorItem extends React.Component {
   onChange (key, value, typeField = '') {
     let changedField = {
@@ -55,6 +18,43 @@ class VariableSelectorItem extends React.Component {
       }
     }
     this.props.onChangeVariableCreatorField(this.props.index, changedField)
+  }
+
+  renderAddedtypeInfo (variable) {
+    switch (variable.type) {
+      case 'range': {
+        return (
+          <div className='margin-half--top'>
+            <span className='margin-half--bottom' > Range to Include. Eg:15 or -20,20: </span>
+            <Input className='margin-half--bottom' value={variable?.range?.rinclude} onChange={(e) => this.onChange('rInclude', e.target.value, 'range')} />
+            <span className='margin-half--bottom' > Decimal Step. Eg: 2 =&gt; step of 0.01 (optional): </span>
+            <Input className='margin-half--bottom' value={variable?.range?.step} onChange={(e) => this.onChange('step', e.target.value, 'range')} />
+            <span className='margin-half--bottom' > Range to Exclude. Eg:0 or -5,5 (optional): </span>
+            <Input className='margin-half--bottom' value={variable?.range?.rExclude} onChange={(e) => this.onChange('rExclude', e.target.value, 'range')} />
+          </div>
+        )
+      }
+      case 'options': {
+        return (
+          <div className='margin-half--top'>
+            <span className='margin-half--bottom' > Options separated by commas. Eg:1,2,4,1: </span>
+            <Input className='margin-half--bottom' value={variable?.options} onChange={(e) => this.onChange('options', e.target.value)} />
+          </div>
+        )
+      }
+      case 'fraction': {
+        return (
+          <div className='margin-half--top'>
+            <span className='margin-half--bottom' > Numerator - Enter an integer range (eg:1,20): </span>
+            <Input className='margin-half--bottom' value={variable?.fractions?.numerator} onChange={(e) => this.onChange('numerator', e.target.value, 'fractions')} />
+            <span className='margin-half--bottom' > Denominator - Enter an integer range (eg:1,20): </span>
+            <Input className='margin-half--bottom' value={variable?.fractions?.denominator} onChange={(e) => this.onChange('denominator', e.target.value, 'fractions')} />
+          </div>
+        )
+      }
+      default:
+        return null
+    }
   }
 
   render () {
@@ -72,7 +72,7 @@ class VariableSelectorItem extends React.Component {
             <Option value="fractions">Fractions</Option>
           </Select>
           {
-            renderAddedtypeInfo(this.props.variable)
+            this.renderAddedtypeInfo(this.props.variable)
           }
         </Panel>
       </Collapse>

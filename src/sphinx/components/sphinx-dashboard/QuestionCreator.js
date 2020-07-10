@@ -78,10 +78,10 @@ const QuestionCreator = (props) => {
           onRemoveImageFromImageList={(removedFile, imageType) => props.onRemoveImageFromImageList(removedFile, imageType)}
           handleAddorSaveSubpartToQuestion={() => props.handleAddorSaveSubpartToQuestion()}
           handleShowQuestionPreview={(previewType) => props.handleShowQuestionPreview(previewType)}
-          onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
-          onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
-          onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
-          onChangeAnswerSelectorField={(templateType, changedField) => this.props.onChangeAnswerSelectorField(templateType, changedField)}
+          onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
+          onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
+          onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
+          onChangeAnswerSelectorField={(templateType, changedField) => props.onChangeAnswerSelectorField(templateType, changedField)}
           subpart={subpartCreator}
         />
         <SubpartTable

@@ -145,7 +145,7 @@ export const onChangeMCQOptionImageList = (imageList, imageType, fieldSet, index
     {
       type: ON_CHANGE_MCQ_OPTION_IMAGE_LIST,
       imageList,
-      imageType,
+      templateType: imageType,
       fieldSet,
       index
     }
@@ -157,7 +157,7 @@ export const onRemoveMCQOptionImage = (removedFile, imageType, fieldSet, index) 
   return (
     {
       type: ON_REMOVE_MCQ_OPTION_IMAGE,
-      imageType,
+      templateType: imageType,
       removedFile,
       fieldSet,
       index

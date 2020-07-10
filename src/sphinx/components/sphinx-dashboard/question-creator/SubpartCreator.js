@@ -115,7 +115,11 @@ class SubpartCreator extends React.Component {
           </Button>
         </Col>
         <Col span={12} className='padding--sides padding-double--top' >
-          <div className='strong margin--bottom'> Variable Selector </div>
+          {
+            variablesNumber
+              ? <div className='strong margin--bottom'> Variable Selector </div>
+              : null
+          }
           {
             variables.map((variable, index) => {
               return (
@@ -129,7 +133,6 @@ class SubpartCreator extends React.Component {
               )
             })
           }
-          <div className='strong margin--ends'> Answer Selector </div>
           <AnswerSelector
             templateType={templateType}
             correctAnswer={correctAnswer}

@@ -55,7 +55,7 @@ const initialState = {
         },
         numerical: {
           text: '',
-          tolerance: 0.05,
+          tolerance: '',
           unit: ''
         }
       }
@@ -292,6 +292,110 @@ const mainReducer = (state = initialState, action) => {
         questionCreator: {
           ...state.questionCreator,
           subpartCreator: subpartCreatorState
+        }
+      }
+    }
+
+    case ActionTypes.ON_REMOVE_MCQ_OPTION_IMAGE: {
+      const { templateType, removedFile, fieldSet, index } = action
+      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+      const newImageList = MCQOptionsState[index].images.filter((file) => {
+        return file.uid !== removedFile.uid
+      })
+      MCQOptionsState[index].images = newImageList
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            correctAnswer: {
+              ...state.questionCreator.subpartCreator.correctAnswer,
+              [templateType]: {
+                ...state.questionCreator.subpartCreator.correctAnswer[templateType],
+                [fieldSet]: MCQOptionsState
+              }
+            }
+          }
+        }
+      }
+    }
+
+    case ActionTypes.ON_CHANGE_ANSWER_SELECTOR_FIELD: {
+      const { changedField, templateType } = action
+
+      if (_.has(changedField, 'incorrectNumber')) {
+        changedField.incorrect = (changedField.incorrectNumber !== 0) ? [...Array(changedField.incorrectNumber).keys()].map(() => MCQAnswerBase) : []
+      }
+
+      if (_.has(changedField, 'correctNumber')) {
+        changedField.correct = (changedField.correct !== 0) ? [...Array(changedField.correctNumber).keys()].map(() => MCQAnswerBase) : []
+      }
+
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            correctAnswer: {
+              ...state.questionCreator.subpartCreator.correctAnswer,
+              [templateType]: {
+                ...state.questionCreator.subpartCreator.correctAnswer[templateType],
+                ...changedField
+              }
+            }
+          }
+        }
+      }
+    }
+
+    case ActionTypes.ON_CHANGE_MCQ_OPTION_FIELD: {
+      const { changedField, templateType, fieldSet, index } = action
+
+      const changedMCQArray = state.questionCreator?.subpartCreator?.correctAnswer[templateType][fieldSet]
+
+      changedMCQArray[index] = {
+        ...changedMCQArray[index],
+        ...changedField
+      }
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            correctAnswer: {
+              ...state.questionCreator.subpartCreator.correctAnswer,
+              [templateType]: {
+                ...state.questionCreator.subpartCreator.correctAnswer[templateType],
+                [fieldSet]: changedMCQArray
+              }
+            }
+          }
+        }
+      }
+    }
+
+    case ActionTypes.ON_CHANGE_MCQ_OPTION_IMAGE_LIST: {
+      const { templateType, imageList, fieldSet, index } = action
+      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+      MCQOptionsState[index].images = imageList
+
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subpartCreator: {
+            ...state.questionCreator.subpartCreator,
+            correctAnswer: {
+              ...state.questionCreator.subpartCreator.correctAnswer,
+              [templateType]: {
+                ...state.questionCreator.subpartCreator.correctAnswer[templateType],
+                [fieldSet]: MCQOptionsState
+              }
+            }
+          }
         }
       }
     }
