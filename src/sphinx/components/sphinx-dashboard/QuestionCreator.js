@@ -18,7 +18,11 @@ import {
   handleAddorSaveSubpartToQuestion,
   handleDeleteSubpart,
   handleEditSubpart,
-  handleShowQuestionPreview
+  handleShowQuestionPreview,
+  onChangeMCQOptionField,
+  onChangeMCQOptionImageList,
+  onRemoveMCQOptionImage,
+  onChangeAnswerSelectorField
 } from '../../actions'
 
 const QuestionCreator = (props) => {
@@ -74,6 +78,10 @@ const QuestionCreator = (props) => {
           onRemoveImageFromImageList={(removedFile, imageType) => props.onRemoveImageFromImageList(removedFile, imageType)}
           handleAddorSaveSubpartToQuestion={() => props.handleAddorSaveSubpartToQuestion()}
           handleShowQuestionPreview={(previewType) => props.handleShowQuestionPreview(previewType)}
+          onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
+          onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
+          onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
+          onChangeAnswerSelectorField={(templateType, changedField) => this.props.onChangeAnswerSelectorField(templateType, changedField)}
           subpart={subpartCreator}
         />
         <SubpartTable
@@ -100,7 +108,11 @@ QuestionCreator.propTypes = {
   handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
   handleDeleteSubpart: PropTypes.func.isRequired,
   handleEditSubpart: PropTypes.func.isRequired,
-  handleShowQuestionPreview: PropTypes.func.isRequired
+  handleShowQuestionPreview: PropTypes.func.isRequired,
+  onChangeMCQOptionField: PropTypes.func.isRequired,
+  onChangeMCQOptionImageList: PropTypes.func.isRequired,
+  onRemoveMCQOptionImage: PropTypes.func.isRequired,
+  onChangeAnswerSelectorField: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -121,5 +133,9 @@ export default connect(
     handleAddorSaveSubpartToQuestion,
     handleDeleteSubpart,
     handleEditSubpart,
-    handleShowQuestionPreview
+    handleShowQuestionPreview,
+    onChangeMCQOptionField,
+    onChangeMCQOptionImageList,
+    onRemoveMCQOptionImage,
+    onChangeAnswerSelectorField
   })(QuestionCreator)

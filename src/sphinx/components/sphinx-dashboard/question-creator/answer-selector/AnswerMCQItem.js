@@ -1,89 +1,50 @@
 import React from 'react'
-import { Collapse, Input, Select } from 'antd'
+import { Collapse, Input } from 'antd'
 import PropTypes from 'prop-types'
 
+import ImageUploader from '../ImageUploader'
+
 const { Panel } = Collapse
-const { Option } = Select
 
-const renderAddedtypeInfo = (variable) => {
-  switch (variable.type) {
-    case 'range': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Range to Include. Eg:15 or -20,20: </span>
-          <Input className='margin-half--bottom' value={variable?.range?.rinclude} onChange={(e) => this.onChange('rInclude', e.target.value, 'range')}/>
-          <span className='margin-half--bottom' > Decimal Step. Eg: 2 =&gt; step of 0.01 (optional): </span>
-          <Input className='margin-half--bottom' value={variable?.range?.step} onChange={(e) => this.onChange('step', e.target.value, 'range')} />
-          <span className='margin-half--bottom' > Range to Exclude. Eg:0 or -5,5 (optional): </span>
-          <Input className='margin-half--bottom' value={variable?.range?.rExclude} onChange={(e) => this.onChange('rExclude', e.target.value, 'range')} />
-        </div>
-      )
-    }
-    case 'options': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Options separated by commas. Eg:1,2,4,1: </span>
-          <Input className='margin-half--bottom' value={variable?.options} onChange={(e) => this.onChange('options', e.target.value)} />
-        </div>
-      )
-    }
-    case 'fraction': {
-      return (
-        <div className='margin-half--top'>
-          <span className='margin-half--bottom' > Numerator - Enter an integer range (eg:1,20): </span>
-          <Input className='margin-half--bottom' value={variable?.fractions?.numerator} onChange={(e) => this.onChange('numerator', e.target.value, 'fractions')} />
-          <span className='margin-half--bottom' > Denominator - Enter an integer range (eg:1,20): </span>
-          <Input className='margin-half--bottom' value={variable?.fractions?.denominator} onChange={(e) => this.onChange('denominator', e.target.value, 'fractions')} />
-        </div>
-      )
-    }
-    default:
-      return null
-  }
-}
-
-class VariableSelectorItem extends React.Component {
-  onChange (key, value, typeField = '') {
-    let changedField = {
+class AnswerMCQItem extends React.PureComponent {
+  onChange (key, value) {
+    const { fieldSet, templateType, index } = this.props
+    const changedField = {
       [key]: value
     }
-    if (typeField) {
-      changedField = {
-        [typeField]: {
-          ...changedField
-        }
-      }
-    }
-    this.props.onChangeVariableCreatorField(this.props.index, changedField)
+    this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)
   }
 
   render () {
-    const { name = `variable${this.props.index}`, type } = this.props.variable
+    const { text, images } = this.props.mcqField
+    const { fieldSet, index, templateType } = this.props
     return (
       <Collapse>
-        <Panel header={name} key={this.props.index}>
-          <span className='margin--bottom' > Variable Name: </span>
-          <Input value={name} className='margin--bottom' onChange={(e) => this.onChange('name', e.target.value)} />
-          <span className='margin--right' > Variable Type: </span>
-          <Select defaultValue="default" value={type} style={{ width: 120 }} onChange={(value) => this.onChange('type', value)}>
-            <Option value="default">Default(2-20)</Option>
-            <Option value="range">Range</Option>
-            <Option value="options">Options</Option>
-            <Option value="fractions">Fractions</Option>
-          </Select>
-          {
-            renderAddedtypeInfo(this.props.variable)
-          }
+        <Panel header={`${fieldSet}-answer-${index}`} key={`${fieldSet}-answer-${index}`}>
+          <span className='margin--bottom' > Text: </span>
+          <Input value={text} className='margin--bottom' onChange={(e) => this.onChange('text', e.target.value)} />
+          <span className='margin--bottom'> Images: </span>
+          <ImageUploader
+            imageList={images}
+            imageType={templateType}
+            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+            onChangeImageList={(imageList, imageType) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
+            onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
+          />
         </Panel>
       </Collapse>
     )
   }
 }
 
-VariableSelectorItem.propTypes = {
-  variable: PropTypes.object.isRequired,
+AnswerMCQItem.propTypes = {
+  fieldSet: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  onChangeVariableCreatorField: PropTypes.func.isRequired
+  templateType: PropTypes.string.isRequired,
+  mcqField: PropTypes.object.isRequired,
+  onChangeMCQOptionField: PropTypes.func.isRequired,
+  onTriggerImagePreview: PropTypes.func.isRequired,
+  onChangeMCQOptionImageList: PropTypes.func.isRequired,
+  onRemoveMCQOptionImage: PropTypes.func.isRequired
 }
-
-export default VariableSelectorItem
+export default AnswerMCQItem

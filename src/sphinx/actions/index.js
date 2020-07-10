@@ -138,3 +138,53 @@ export const handleShowQuestionPreview = (previewType = 'question') => {
     }
   )
 }
+
+export const ON_CHANGE_MCQ_OPTION_IMAGE_LIST = 'ON_CHANGE_MCQ_OPTION_IMAGE_LIST'
+export const onChangeMCQOptionImageList = (imageList, imageType, fieldSet, index) => {
+  return (
+    {
+      type: ON_CHANGE_MCQ_OPTION_IMAGE_LIST,
+      imageList,
+      imageType,
+      fieldSet,
+      index
+    }
+  )
+}
+
+export const ON_REMOVE_MCQ_OPTION_IMAGE = 'ON_REMOVE_MCQ_OPTION_IMAGE'
+export const onRemoveMCQOptionImage = (removedFile, imageType, fieldSet, index) => {
+  return (
+    {
+      type: ON_REMOVE_MCQ_OPTION_IMAGE,
+      imageType,
+      removedFile,
+      fieldSet,
+      index
+    }
+  )
+}
+
+export const ON_CHANGE_MCQ_OPTION_FIELD = 'ON_CHANGE_MCQ_OPTION_FIELD'
+export const onChangeMCQOptionField = (templateType, fieldSet, index, changedField) => {
+  return (
+    {
+      type: ON_CHANGE_MCQ_OPTION_FIELD,
+      changedField,
+      index,
+      fieldSet,
+      templateType
+    }
+  )
+}
+
+export const ON_CHANGE_ANSWER_SELECTOR_FIELD = 'ON_CHANGE_ANSWER_SELECTOR_FIELD'
+export const onChangeAnswerSelectorField = (templateType, changedField) => {
+  return (
+    {
+      type: ON_CHANGE_ANSWER_SELECTOR_FIELD,
+      templateType,
+      changedField
+    }
+  )
+}

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import ImageUploader from './ImageUploader'
 import VariableSelectorItem from './VariableSelectorItem'
 import ImagePreviewModal from './ImagePreviewModal'
-// import AnswerSelector from './AnswerSelector'
+import AnswerSelector from './AnswerSelector'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -31,7 +31,8 @@ class SubpartCreator extends React.Component {
       variablesNumber,
       imagePreviewTitle,
       imagePreviewVisible,
-      previewImage
+      previewImage,
+      correctAnswer
     } = this.props.subpart
 
     const isEditing = this.props.editMode
@@ -129,6 +130,15 @@ class SubpartCreator extends React.Component {
             })
           }
           <div className='strong margin--ends'> Answer Selector </div>
+          <AnswerSelector
+            templateType={templateType}
+            correctAnswer={correctAnswer}
+            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+            onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
+            onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
+            onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
+            onChangeAnswerSelectorField={(templateType, changedField) => this.props.onChangeAnswerSelectorField(templateType, changedField)}
+          />
         </Col>
         <ImagePreviewModal
           previewTitle={imagePreviewTitle}
@@ -151,7 +161,11 @@ SubpartCreator.propTypes = {
   onRemoveImageFromImageList: PropTypes.func.isRequired,
   handleAddorSaveSubpartToQuestion: PropTypes.func.isRequired,
   handleShowQuestionPreview: PropTypes.func.isRequired,
-  editMode: PropTypes.bool.isRequired
+  editMode: PropTypes.bool.isRequired,
+  onChangeMCQOptionField: PropTypes.func.isRequired,
+  onChangeMCQOptionImageList: PropTypes.func.isRequired,
+  onRemoveMCQOptionImage: PropTypes.func.isRequired,
+  onChangeAnswerSelectorField: PropTypes.func.isRequired
 }
 
 export default SubpartCreator

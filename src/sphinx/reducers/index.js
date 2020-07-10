@@ -33,14 +33,14 @@ const initialState = {
       hintText: '',
       solutionText: '',
       variablesNumber: 0,
-      templateType: 'Textual',
+      templateType: 'textual',
       variables: [],
       imagePreviewVisible: false,
       previewImage: '',
       imagePreviewTitle: '',
       correctAnswer: {
         MCSAQ: {
-          correct: MCQAnswerBase,
+          correct: [{ ...MCQAnswerBase }],
           incorrectNumber: 1,
           incorrect: [{ ...MCQAnswerBase }]
         },
@@ -50,7 +50,9 @@ const initialState = {
           correctNumber: 1,
           correct: [{ ...MCQAnswerBase }]
         },
-        textual: '',
+        textual: {
+          text: ''
+        },
         numerical: {
           text: '',
           tolerance: 0.05,
