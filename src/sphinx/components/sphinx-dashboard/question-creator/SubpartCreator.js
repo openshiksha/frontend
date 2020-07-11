@@ -133,15 +133,17 @@ class SubpartCreator extends React.Component {
               )
             })
           }
-          <AnswerSelector
-            templateType={templateType}
-            correctAnswer={correctAnswer}
-            onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
-            onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
-            onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
-            onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
-            onChangeAnswerSelectorField={(templateType, changedField) => this.props.onChangeAnswerSelectorField(templateType, changedField)}
-          />
+          <div className='margin--top' >
+            <AnswerSelector
+              templateType={templateType}
+              correctAnswer={correctAnswer}
+              onTriggerImagePreview={(filePreview, fileName) => this.props.onTriggerImagePreview(filePreview, fileName)}
+              onChangeMCQOptionImageList={(imageList, imageType, fieldSet, index) => this.props.onChangeMCQOptionImageList(imageList, imageType, fieldSet, index)}
+              onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => this.props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
+              onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => this.props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
+              onChangeAnswerSelectorField={(templateType, changedField) => this.props.onChangeAnswerSelectorField(templateType, changedField)}
+            />
+          </div>
         </Col>
         <ImagePreviewModal
           previewTitle={imagePreviewTitle}
