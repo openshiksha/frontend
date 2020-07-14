@@ -11,7 +11,7 @@ const variableBase = {
     step: 1
   },
   options: '',
-  fractions: {
+  fraction: {
     numerator: 1,
     denominator: 1
   }
@@ -40,6 +40,7 @@ const initialState = {
       imagePreviewTitle: '',
       correctAnswer: {
         MCSAQ: {
+          format: 'radio',
           correct: [{ ...MCQAnswerBase }],
           incorrectNumber: 1,
           incorrect: [{ ...MCQAnswerBase }]

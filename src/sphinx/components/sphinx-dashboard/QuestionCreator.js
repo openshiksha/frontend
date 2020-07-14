@@ -90,7 +90,7 @@ const QuestionCreator = (props) => {
           handleEditSubpart={(subpart) => props.handleEditSubpart(subpart)}
         />
         <Button className='margin--ends background-peach' onClick={() => props.handleShowQuestionPreview()}> Preview Question </Button>
-        <Button className='margin--sides background-green text-white' onClick={() => props.handleTestAction('abc')}> Submit Question </Button>
+        <Button className='margin--sides background-green text-white' onClick={() => props.handleTestAction(subpartCreator)}> Submit Question </Button>
       </Col>
     </Row>
   )
