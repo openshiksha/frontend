@@ -8,7 +8,7 @@ import SubpartCreator from './question-creator/SubpartCreator'
 import QuestionAlerts from './question-creator/QuestionAlerts'
 import SubpartPreview from './question-creator/SubpartPreview'
 import {
-  handleTestAction,
+  handleSubmitQuestion,
   onChangeSubpartCreatorField,
   onChangeVariableCreatorField,
   handleClosePreviewWindow,
@@ -22,18 +22,31 @@ import {
   onChangeMCQOptionField,
   onChangeMCQOptionImageList,
   onRemoveMCQOptionImage,
-  onChangeAnswerSelectorField
+  onChangeAnswerSelectorField,
+  handlePreviewSubpart,
+  handleSetPreviewType
 } from '../../actions'
 
 const QuestionCreator = (props) => {
-  const { tableSubparts = [], subpartCreator = {}, questionErrorText, questionSuccessText, editMode, previewType, subparts = [], subpartPreview } = props.questionCreator
+  const {
+    tableSubparts = [],
+    subpartCreator = {},
+    questionErrorText,
+    questionSuccessText,
+    editMode,
+    previewType,
+    subpartPreview,
+    questionPreview,
+    subparts = [],
+    showPreviewQuestionItem
+  } = props.questionCreator
   const showQuestionAlerts = (questionErrorText.length || questionSuccessText.length)
   return (
     <Row className='padding--sides width-100 background-offwhite'>
       <Col span={24} >
         <div className='f24 margin--bottom'>Question Creator</div>
         <Modal
-          visible={showQuestionAlerts || previewType}
+          visible={showQuestionAlerts || showPreviewQuestionItem}
           footer={null}
           width={previewType ? 1000 : 500}
           onCancel={props.handleClosePreviewWindow}
@@ -47,14 +60,14 @@ const QuestionCreator = (props) => {
               : null
           }
           {
-            previewType
+            showPreviewQuestionItem
               ? previewType === 'subpart'
                 ? <SubpartPreview
                   subpartPreview ={subpartPreview}
                 />
                 : <Card title={'Question Preview'} className='margin-double--top' >
                   {
-                    subparts.map((subpart, index) => {
+                    questionPreview.map((subpart, index) => {
                       return (<SubpartPreview
                         key={index}
                         subpartPreview={subpart}
@@ -82,6 +95,8 @@ const QuestionCreator = (props) => {
           onRemoveMCQOptionImage={(removedFile, imageType, fieldSet, index) => props.onRemoveMCQOptionImage(removedFile, imageType, fieldSet, index)}
           onChangeMCQOptionField={(templateType, fieldSet, index, changedField) => props.onChangeMCQOptionField(templateType, fieldSet, index, changedField)}
           onChangeAnswerSelectorField={(templateType, changedField) => props.onChangeAnswerSelectorField(templateType, changedField)}
+          handlePreviewSubpart={(subpart) => props.handlePreviewSubpart(subpart)}
+          handleSetPreviewType={(previewType) => props.handleSetPreviewType(previewType)}
           subpart={subpartCreator}
         />
         <SubpartTable
@@ -89,8 +104,14 @@ const QuestionCreator = (props) => {
           handleDeleteSubpart={(subpart) => props.handleDeleteSubpart(subpart)}
           handleEditSubpart={(subpart) => props.handleEditSubpart(subpart)}
         />
-        <Button className='margin--ends background-peach' onClick={() => props.handleShowQuestionPreview()}> Preview Question </Button>
-        <Button className='margin--sides background-green text-white' onClick={() => props.handleTestAction(subpartCreator)}> Submit Question </Button>
+        <Button className='margin--ends background-peach' onClick={async () => {
+          props.handleSetPreviewType()
+          await Promise.all(subparts.map(async (subpart) => {
+            await props.handlePreviewSubpart(subpart)
+          }))
+          props.handleShowQuestionPreview()
+        }}> Preview Question </Button>
+        <Button className='margin--sides background-green text-white' onClick={() => props.handleSubmitQuestion()}> Submit Question </Button>
       </Col>
     </Row>
   )
@@ -98,7 +119,7 @@ const QuestionCreator = (props) => {
 
 QuestionCreator.propTypes = {
   questionCreator: PropTypes.object.isRequired,
-  handleTestAction: PropTypes.func.isRequired,
+  handleSubmitQuestion: PropTypes.func.isRequired,
   onChangeSubpartCreatorField: PropTypes.func.isRequired,
   onChangeVariableCreatorField: PropTypes.func.isRequired,
   handleClosePreviewWindow: PropTypes.func.isRequired,
@@ -112,7 +133,9 @@ QuestionCreator.propTypes = {
   onChangeMCQOptionField: PropTypes.func.isRequired,
   onChangeMCQOptionImageList: PropTypes.func.isRequired,
   onRemoveMCQOptionImage: PropTypes.func.isRequired,
-  onChangeAnswerSelectorField: PropTypes.func.isRequired
+  onChangeAnswerSelectorField: PropTypes.func.isRequired,
+  handlePreviewSubpart: PropTypes.func.isRequired,
+  handleSetPreviewType: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -123,7 +146,7 @@ const mapStateToProps = ({ questionCreator }) => {
 
 export default connect(
   mapStateToProps, {
-    handleTestAction,
+    handleSubmitQuestion,
     onChangeSubpartCreatorField,
     onChangeVariableCreatorField,
     handleClosePreviewWindow,
@@ -137,5 +160,7 @@ export default connect(
     onChangeMCQOptionField,
     onChangeMCQOptionImageList,
     onRemoveMCQOptionImage,
-    onChangeAnswerSelectorField
+    onChangeAnswerSelectorField,
+    handlePreviewSubpart,
+    handleSetPreviewType
   })(QuestionCreator)

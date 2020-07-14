@@ -102,7 +102,11 @@ class SubpartCreator extends React.Component {
             onRemoveImageFromImageList={(removedFile, imageType) => this.props.onRemoveImageFromImageList(removedFile, imageType)}
           />
           <Button
-            onClick={() => this.props.handleShowQuestionPreview('subpart')}
+            onClick={async () => {
+              this.props.handleSetPreviewType('subpart')
+              await this.props.handlePreviewSubpart(this.props.subpart)
+              this.props.handleShowQuestionPreview()
+            }}
             className='margin--top margin--right background-peach'
           >
             Preview Subpart
@@ -170,7 +174,9 @@ SubpartCreator.propTypes = {
   onChangeMCQOptionField: PropTypes.func.isRequired,
   onChangeMCQOptionImageList: PropTypes.func.isRequired,
   onRemoveMCQOptionImage: PropTypes.func.isRequired,
-  onChangeAnswerSelectorField: PropTypes.func.isRequired
+  onChangeAnswerSelectorField: PropTypes.func.isRequired,
+  handlePreviewSubpart: PropTypes.func.isRequired,
+  handleSetPreviewType: PropTypes.func.isRequired
 }
 
 export default SubpartCreator

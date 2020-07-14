@@ -67,7 +67,9 @@ const initialState = {
     questionSuccessText: '',
     editMode: false,
     previewType: '',
-    subpartPreview: {}
+    subpartPreview: {},
+    questionPreview: [],
+    showPreviewQuestionItem: false
   }
 }
 
@@ -236,7 +238,9 @@ const mainReducer = (state = initialState, action) => {
           questionErrorText: '',
           questionSuccessText: '',
           subpartPreview: {},
-          previewType: ''
+          questionPreview: [],
+          previewType: '',
+          showPreviewQuestionItem: false
         }
       }
     }
@@ -267,16 +271,65 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
-    case ActionTypes.HANDLE_SHOW_QUESTION_PREVIEW: {
-      const { previewType } = action
+    case ActionTypes.HANDLE_PREVIEW_SUBPART_SUCCESS: {
+      const {
+        hint: {
+          text: hintText
+        },
+        solution: {
+          text: solutionText
+        },
+        content: {
+          text: contentText
+        },
+        subpartIndex
+      } = action.response.payload
 
-      const subpartPreview = state.questionCreator.subpartCreator
+      const {
+        previewType,
+        subpartCreator,
+        questionPreview,
+        subparts
+      } = state.questionCreator
+      let subpartPreview = subpartCreator
+      if (previewType === 'question') {
+        subpartPreview = subparts[subpartIndex]
+      }
+
+      subpartPreview = {
+        ...subpartPreview,
+        hintText,
+        contentText,
+        solutionText
+      }
+      questionPreview[subpartIndex] = subpartPreview
       return {
         ...state,
         questionCreator: {
           ...state.questionCreator,
-          previewType,
-          subpartPreview
+          subpartPreview,
+          questionPreview
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_SET_PREVIEW_TYPE: {
+      const { previewType } = action
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          previewType
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_SHOW_QUESTION_PREVIEW: {
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          showPreviewQuestionItem: true
         }
       }
     }
