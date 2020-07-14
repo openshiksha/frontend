@@ -1,9 +1,10 @@
 import React from 'react'
-import { Collapse, Input, InputNumber } from 'antd'
+import { Collapse, Input, InputNumber, Select } from 'antd'
 import PropTypes from 'prop-types'
 import AnswerMCQItem from './answer-selector/AnswerMCQItem'
 
 const { Panel } = Collapse
+const { Option } = Select
 
 class AnswerSelector extends React.PureComponent {
   onChange (key, value) {
@@ -67,6 +68,11 @@ class AnswerSelector extends React.PureComponent {
       case 'MCSAQ': {
         return (
           <div className='margin-half--top'>
+            <span className='margin-half--bottom margin--right' > Format: </span>
+            <Select className='margin-half--bottom' style={{ width: 120 }} value={correctAnswer[templateType].format} onChange={(value) => this.onChange('format', value)} >
+              <Option value="radio">Radio Buttons</Option>
+              <Option value="dropdown">Dropdown</Option>
+            </Select>
             <div className='margin--ends'>
               <AnswerMCQItem
                 key={0}

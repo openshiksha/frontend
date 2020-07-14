@@ -1,17 +1,28 @@
-import { GET_API } from '../../common/middlewares/getAPI'
+import { POST_API } from '../../common/middlewares/postAPI'
+import { convertSubpartToPayload } from '../../common/utils/sphinxPreviewPayload'
 
-export const HANDLE_TEST_ACTION_REQUEST = 'HANDLE_TEST_ACTION_REQUEST'
-export const HANDLE_TEST_ACTION_SUCCESS = 'HANDLE_TEST_ACTION_SUCCESS'
-export const HANDLE_TEST_ACTION_FAILURE = 'HANDLE_TEST_ACTION_FAILURE'
-export const handleTestAction = (test = 'blah') => ({
-  [GET_API]: {
-    types: [HANDLE_TEST_ACTION_REQUEST, HANDLE_TEST_ACTION_SUCCESS, HANDLE_TEST_ACTION_FAILURE],
-    endpoint: '/sphinx/deal',
-    onSuccess: (response, state) => {
-      console.log(response)
-    },
-    onFailure: (response, state) => {
-      console.log(response)
+export const HANDLE_PREVIEW_SUBPART_REQUEST = 'HANDLE_PREVIEW_SUBPART_REQUEST'
+export const HANDLE_PREVIEW_SUBPART_SUCCESS = 'HANDLE_PREVIEW_SUBPART_SUCCESS'
+export const HANDLE_PREVIEW_SUBPART_FAILURE = 'HANDLE_PREVIEW_SUBPART_FAILURE'
+export const handlePreviewSubpart = (subpart) => ({
+  [POST_API]: {
+    types: [HANDLE_PREVIEW_SUBPART_REQUEST, HANDLE_PREVIEW_SUBPART_SUCCESS, HANDLE_PREVIEW_SUBPART_FAILURE],
+    endpoint: '/sphinx/deal/',
+    payload: {
+      subpart: convertSubpartToPayload(subpart)
+    }
+  }
+})
+
+export const HANDLE_SUBMIT_QUESTION_REQUEST = 'HANDLE_SUBMIT_QUESTION_REQUEST'
+export const HANDLE_SUBMIT_QUESTION_SUCCESS = 'HANDLE_SUBMIT_QUESTION_SUCCESS'
+export const HANDLE_SUBMIT_QUESTION_FAILURE = 'HANDLE_SUBMIT_QUESTION_FAILURE'
+export const handleSubmitQuestion = (question) => ({
+  [POST_API]: {
+    types: [HANDLE_SUBMIT_QUESTION_REQUEST, HANDLE_SUBMIT_QUESTION_SUCCESS, HANDLE_SUBMIT_QUESTION_FAILURE],
+    endpoint: '/sphinx/submit/',
+    payload: {
+      question
     }
   }
 })
@@ -130,10 +141,19 @@ export const handleEditSubpart = (subpart) => {
 }
 
 export const HANDLE_SHOW_QUESTION_PREVIEW = 'HANDLE_SHOW_QUESTION_PREVIEW'
-export const handleShowQuestionPreview = (previewType = 'question') => {
+export const handleShowQuestionPreview = () => {
   return (
     {
-      type: HANDLE_SHOW_QUESTION_PREVIEW,
+      type: HANDLE_SHOW_QUESTION_PREVIEW
+    }
+  )
+}
+
+export const HANDLE_SET_PREVIEW_TYPE = 'HANDLE_SET_PREVIEW_TYPE'
+export const handleSetPreviewType = (previewType = 'question') => {
+  return (
+    {
+      type: HANDLE_SET_PREVIEW_TYPE,
       previewType
     }
   )

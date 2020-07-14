@@ -46,9 +46,9 @@ class VariableSelectorItem extends React.Component {
         return (
           <div className='margin-half--top'>
             <span className='margin-half--bottom' > Numerator - Enter an integer range (eg:1,20): </span>
-            <Input className='margin-half--bottom' value={variable?.fractions?.numerator} onChange={(e) => this.onChange('numerator', e.target.value, 'fractions')} />
+            <Input className='margin-half--bottom' value={variable?.fraction?.numerator} onChange={(e) => this.onChange('numerator', e.target.value, 'fraction')} />
             <span className='margin-half--bottom' > Denominator - Enter an integer range (eg:1,20): </span>
-            <Input className='margin-half--bottom' value={variable?.fractions?.denominator} onChange={(e) => this.onChange('denominator', e.target.value, 'fractions')} />
+            <Input className='margin-half--bottom' value={variable?.fraction?.denominator} onChange={(e) => this.onChange('denominator', e.target.value, 'fraction')} />
           </div>
         )
       }
@@ -69,7 +69,7 @@ class VariableSelectorItem extends React.Component {
             <Option value="default">Default(2-20)</Option>
             <Option value="range">Range</Option>
             <Option value="options">Options</Option>
-            <Option value="fractions">Fractions</Option>
+            <Option value="fraction">Fractions</Option>
           </Select>
           {
             this.renderAddedtypeInfo(this.props.variable)
