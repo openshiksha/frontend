@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 import * as ActionTypes from '../actions'
+import { addProgrammaticAnswersToSubpart } from '../../common/utils/sphinxPreviewPayload'
 
 const variableBase = {
   name: 'defaultName',
@@ -273,35 +274,13 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.HANDLE_PREVIEW_SUBPART_SUCCESS: {
       const {
-        hint: {
-          text: hintText
-        },
-        solution: {
-          text: solutionText
-        },
-        content: {
-          text: contentText
-        },
         subpartIndex
       } = action.response.payload
 
-      const {
-        previewType,
-        subpartCreator,
-        questionPreview,
-        subparts
-      } = state.questionCreator
-      let subpartPreview = subpartCreator
-      if (previewType === 'question') {
-        subpartPreview = subparts[subpartIndex]
-      }
+      const question = _.cloneDeep(state.questionCreator)
+      const subpartPreview = addProgrammaticAnswersToSubpart(question, action.response.payload)
 
-      subpartPreview = {
-        ...subpartPreview,
-        hintText,
-        contentText,
-        solutionText
-      }
+      const questionPreview = state.questionCreator.questionPreview
       questionPreview[subpartIndex] = subpartPreview
       return {
         ...state,

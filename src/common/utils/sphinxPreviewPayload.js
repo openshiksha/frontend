@@ -81,8 +81,8 @@ const getAnswerKeyforBackend = (correctAnswer, templateType) => {
     case 'MCMAQ': {
       return {
         options: {
-          correct: correctAnswer.MCSAQ.correct,
-          incorrect: correctAnswer.MCSAQ.incorrect
+          correct: correctAnswer.MCMAQ.correct,
+          incorrect: correctAnswer.MCMAQ.incorrect
         }
       }
     }
@@ -124,4 +124,71 @@ export const convertSubpartToPayload = (subpart) => {
     variable_constraints: variableConstraints,
     ...getAnswerKeyforBackend(correctAnswer, templateType)
   }
+}
+
+export const addProgrammaticAnswersToSubpart = (questionCreator, payload) => {
+  const {
+    hint: {
+      text: hintText
+    },
+    solution: {
+      text: solutionText
+    },
+    content: {
+      text: contentText
+    },
+    answer,
+    options,
+    subpartIndex
+  } = payload
+
+  const {
+    previewType,
+    subpartCreator,
+    subparts
+  } = questionCreator
+  let subpartPreview = { ...subpartCreator }
+  if (previewType === 'question') {
+    subpartPreview = { ...subparts[subpartIndex] }
+  }
+
+  const { templateType } = subpartPreview
+  switch (templateType) {
+    case 'textual': {
+      subpartPreview.correctAnswer[templateType].text = answer
+      break
+    }
+    case 'numerical': {
+      subpartPreview.correctAnswer[templateType].text = answer.value
+      break
+    }
+    case 'MCSAQ': {
+      subpartPreview.correctAnswer[templateType].correct[0].text = options.correct.text
+      options.incorrect.forEach((incorrectOption, index) => {
+        subpartPreview.correctAnswer[templateType].incorrect[index].text = incorrectOption.text
+      })
+      break
+    }
+
+    case 'MCMAQ': {
+      options.correct.forEach((correctOption, index) => {
+        subpartPreview.correctAnswer[templateType].correct[index].text = correctOption.text
+      })
+      options.incorrect.forEach((incorrectOption, index) => {
+        subpartPreview.correctAnswer[templateType].incorrect[index].text = incorrectOption.text
+      })
+      break
+    }
+    default: break
+  }
+
+  subpartPreview = {
+    ...subpartPreview,
+    hintText,
+    contentText,
+    solutionText,
+    index: subpartIndex
+  }
+
+  return subpartPreview
 }
