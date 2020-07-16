@@ -1,11 +1,12 @@
 
 import React from 'react'
-import { Card, Input, Radio, Dropdown, Menu, Button } from 'antd'
+import { Card, Input, Radio, Dropdown, Menu, Button, Checkbox } from 'antd'
 import PropTypes from 'prop-types'
 import { DownOutlined } from '@ant-design/icons'
 
 const radioStyle = {
-  display: 'block'
+  display: 'block',
+  marginLeft: 0
 }
 
 class SubpartPreview extends React.PureComponent {
@@ -126,48 +127,46 @@ class SubpartPreview extends React.PureComponent {
         const { correct, incorrect } = correctAnswer[templateType]
         return (
           <>
-            <Radio.Group>
-              {
-                correct.map((correctAnswer, answerIndex) => {
-                  return (
-                    <Radio style={radioStyle} key={answerIndex} checked={true}>
-                      <span> {correctAnswer.text} </span>
-                      {
-                        correctAnswer.images.length
-                          ? <div className='center'>
-                            {
-                              correctAnswer.images.map((imageFile, index) => {
-                                return (<img key={index} alt={`preview-correct-${answerIndex}-${index}`} src={imageFile.thumbUrl} />)
-                              })
-                            }
-                          </div>
-                          : null
-                      }
-                    </Radio>
-                  )
-                })
-              }
-              {
-                incorrect.map((incorrectAnswer, answerIndex) => {
-                  return (
-                    <Radio style={radioStyle} key={answerIndex} checked={false} disabled={true} value={incorrectAnswer.text}>
-                      <span> {incorrectAnswer.text} </span>
-                      {
-                        incorrectAnswer.images.length
-                          ? <div className='center'>
-                            {
-                              incorrectAnswer.images.map((imageFile, index) => {
-                                return (<img key={index} alt={`preview-incorrect-${answerIndex}-${index}`} src={imageFile.thumbUrl} />)
-                              })
-                            }
-                          </div>
-                          : null
-                      }
-                    </Radio>
-                  )
-                })
-              }
-            </Radio.Group>
+            {
+              correct.map((correctAnswer, answerIndex) => {
+                return (
+                  <Checkbox style={radioStyle} key={answerIndex} checked={true}>
+                    <span> {correctAnswer.text} </span>
+                    {
+                      correctAnswer.images.length
+                        ? <div className='center'>
+                          {
+                            correctAnswer.images.map((imageFile, index) => {
+                              return (<img key={index} alt={`preview-correct-${answerIndex}-${index}`} src={imageFile.thumbUrl} />)
+                            })
+                          }
+                        </div>
+                        : null
+                    }
+                  </Checkbox>
+                )
+              })
+            }
+            {
+              incorrect.map((incorrectAnswer, answerIndex) => {
+                return (
+                  <Checkbox style={radioStyle} key={answerIndex} checked={false} disabled={true} value={incorrectAnswer.text}>
+                    <span> {incorrectAnswer.text} </span>
+                    {
+                      incorrectAnswer.images.length
+                        ? <div className='center'>
+                          {
+                            incorrectAnswer.images.map((imageFile, index) => {
+                              return (<img key={index} alt={`preview-incorrect-${answerIndex}-${index}`} src={imageFile.thumbUrl} />)
+                            })
+                          }
+                        </div>
+                        : null
+                    }
+                  </Checkbox>
+                )
+              })
+            }
           </>
         )
       }
