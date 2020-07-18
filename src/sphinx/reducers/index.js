@@ -70,7 +70,21 @@ const initialState = {
     previewType: '',
     subpartPreview: {},
     questionPreview: [],
-    showPreviewQuestionItem: false
+    showPreviewQuestionItem: false,
+    content: {
+      text: '',
+      images: []
+    },
+    hint: {
+      text: '',
+      images: []
+    },
+    tags: [],
+    board: 1, // will give a drop down eventually,
+    language: 1, // will be a dropdown eventually
+    class: '',
+    subject: '',
+    chapter: ''
   }
 }
 
