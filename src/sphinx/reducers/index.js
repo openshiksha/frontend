@@ -71,20 +71,17 @@ const initialState = {
     subpartPreview: {},
     questionPreview: [],
     showPreviewQuestionItem: false,
-    content: {
-      text: '',
-      images: []
-    },
-    hint: {
-      text: '',
-      images: []
-    },
+    content: '',
+    hint: '',
     tags: [],
     board: 1, // will give a drop down eventually,
     language: 1, // will be a dropdown eventually
-    class: '',
+    standard: '',
     subject: '',
-    chapter: ''
+    chapter: '',
+    subjectData: [],
+    chapterData: [],
+    tagsData: []
   }
 }
 
@@ -110,6 +107,22 @@ const mainReducer = (state = initialState, action) => {
           questionSuccessText: '',
           previewType: '',
           subpartPreview: {}
+        }
+      }
+    }
+
+    case ActionTypes.ON_CHANGE_QUESTION_CREATOR_FIELD: {
+      const { changedField } = action
+
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          questionErrorText: '',
+          questionSuccessText: '',
+          previewType: '',
+          subpartPreview: {},
+          ...changedField
         }
       }
     }

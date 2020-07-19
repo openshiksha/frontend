@@ -37,6 +37,16 @@ export const onChangeSubpartCreatorField = (changedField) => {
   )
 }
 
+export const ON_CHANGE_QUESTION_CREATOR_FIELD = 'ON_CHANGE_QUESTION_CREATOR_FIELD'
+export const onChangeQuestionCreatorField = (changedField) => {
+  return (
+    {
+      type: ON_CHANGE_QUESTION_CREATOR_FIELD,
+      changedField
+    }
+  )
+}
+
 export const ON_CHANGE_VARIABLE_CREATOR_FIELD = 'ON_CHANGE_VARIABLE_CREATOR_FIELD'
 export const onChangeVariableCreatorField = (changedIndex, changedField) => {
   return (
