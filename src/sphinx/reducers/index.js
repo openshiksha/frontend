@@ -127,6 +127,51 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
+    case ActionTypes.GET_ALL_TAGS_SUCCESS: {
+      const {
+        tags
+      } = action.response.payload
+
+      const parsedTags = JSON.parse(tags)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          tagsData: parsedTags
+        }
+      }
+    }
+
+    case ActionTypes.GET_SUBJECTS_FROM_STANDARD_SUCCESS: {
+      const {
+        subjects
+      } = action.response.payload
+
+      const parsedSubjects = JSON.parse(subjects)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subjectData: parsedSubjects
+        }
+      }
+    }
+
+    case ActionTypes.GET_CHAPTERS_FROM_SUBJECT_SUCCESS: {
+      const {
+        chapters
+      } = action.response.payload
+
+      const parsedChapters = JSON.parse(chapters)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          chapterData: parsedChapters
+        }
+      }
+    }
+
     case ActionTypes.ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD: {
       const { changedField } = action
 

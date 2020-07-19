@@ -25,18 +25,27 @@ import {
   onChangeAnswerSelectorField,
   handlePreviewSubpart,
   handleSetPreviewType,
-  onChangeQuestionCreatorField
+  onChangeQuestionCreatorField,
+  getAllTags,
+  getSubjectsFromStandard,
+  getChaptersFromSubject
 } from '../../actions'
 
 const { TextArea } = Input
 const { Option } = Select
 
-class QuestionCreator extends React.PureComponent {
+class QuestionCreator extends React.Component {
   onChange (key, value) {
     const changedField = {
       [key]: value
     }
     this.props.onChangeQuestionCreatorField(changedField)
+  }
+
+  componentDidMount () {
+    this.props.getAllTags()
+    this.props.getSubjectsFromStandard()
+    this.props.getChaptersFromSubject()
   }
 
   render () {
@@ -61,8 +70,9 @@ class QuestionCreator extends React.PureComponent {
       chapter,
       subjectData = [],
       chapterData = [],
-      tagData = []
+      tagsData = []
     } = this.props.questionCreator
+
     const showQuestionAlerts = (questionErrorText.length || questionSuccessText.length)
     return (
       <Row className='padding--sides width-100 background-offwhite'>
@@ -130,7 +140,7 @@ class QuestionCreator extends React.PureComponent {
             {
               subjectData.map((subject, subjectIndex) => {
                 return (
-                  <Option key={subjectIndex} value={subject.value}>{subject.label}</Option>
+                  <Option key={subjectIndex} value={subject.name}>{subject.name}</Option>
                 )
               })
             }
@@ -140,7 +150,7 @@ class QuestionCreator extends React.PureComponent {
             {
               chapterData.map((chapter, chapterIndex) => {
                 return (
-                  <Option key={chapterIndex} value={chapter.value}>{chapter.label}</Option>
+                  <Option key={chapterIndex} value={chapter.name}>{chapter.name}</Option>
                 )
               })
             }
@@ -158,9 +168,9 @@ class QuestionCreator extends React.PureComponent {
           <span className='margin--right' > Tags: </span>
           <Select mode="multiple" style={{ width: '100%' }} value={tags} placeholder="Please select the tags required" onChange={(value) => this.onChange('tags', value)}>
             {
-              tagData.map((tag, tagIndex) => {
+              tagsData.map((tag, tagIndex) => {
                 return (
-                  <Option key={tagIndex} value={tag.value}>{tag.label}</Option>
+                  <Option key={tagIndex} value={tag.name}>{tag.name}</Option>
                 )
               })
             }
@@ -223,7 +233,10 @@ QuestionCreator.propTypes = {
   onChangeAnswerSelectorField: PropTypes.func.isRequired,
   handlePreviewSubpart: PropTypes.func.isRequired,
   handleSetPreviewType: PropTypes.func.isRequired,
-  onChangeQuestionCreatorField: PropTypes.func.isRequired
+  onChangeQuestionCreatorField: PropTypes.func.isRequired,
+  getAllTags: PropTypes.func.isRequired,
+  getChaptersFromSubject: PropTypes.func.isRequired,
+  getSubjectsFromStandard: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -251,5 +264,8 @@ export default connect(
     onChangeAnswerSelectorField,
     handlePreviewSubpart,
     handleSetPreviewType,
-    onChangeQuestionCreatorField
+    onChangeQuestionCreatorField,
+    getAllTags,
+    getChaptersFromSubject,
+    getSubjectsFromStandard
   })(QuestionCreator)

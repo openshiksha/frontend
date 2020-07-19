@@ -1,5 +1,36 @@
 import { POST_API } from '../../common/middlewares/postAPI'
+import { GET_API } from '../../common/middlewares/getAPI'
 import { convertSubpartToPayload } from '../../common/utils/sphinxPreviewPayload'
+
+export const GET_ALL_TAGS_REQUEST = 'GET_ALL_TAGS_REQUEST'
+export const GET_ALL_TAGS_SUCCESS = 'GET_ALL_TAGS_SUCCESS'
+export const GET_ALL_TAGS_FAILURE = 'GET_ALL_TAGS_FAILURE'
+export const getAllTags = () => ({
+  [GET_API]: {
+    types: [GET_ALL_TAGS_REQUEST, GET_ALL_TAGS_SUCCESS, GET_ALL_TAGS_FAILURE],
+    endpoint: '/sphinx/tags/'
+  }
+})
+
+export const GET_SUBJECTS_FROM_STANDARD_REQUEST = 'GET_SUBJECTS_FROM_STANDARD_REQUEST'
+export const GET_SUBJECTS_FROM_STANDARD_SUCCESS = 'GET_SUBJECTS_FROM_STANDARD_SUCCESS'
+export const GET_SUBJECTS_FROM_STANDARD_FAILURE = 'GET_SUBJECTS_FROM_STANDARD_FAILURE'
+export const getSubjectsFromStandard = () => ({
+  [GET_API]: {
+    types: [GET_SUBJECTS_FROM_STANDARD_REQUEST, GET_SUBJECTS_FROM_STANDARD_SUCCESS, GET_SUBJECTS_FROM_STANDARD_FAILURE],
+    endpoint: '/sphinx/subjects/'
+  }
+})
+
+export const GET_CHAPTERS_FROM_SUBJECT_REQUEST = 'GET_CHAPTERS_FROM_SUBJECT_REQUEST'
+export const GET_CHAPTERS_FROM_SUBJECT_SUCCESS = 'GET_CHAPTERS_FROM_SUBJECT_SUCCESS'
+export const GET_CHAPTERS_FROM_SUBJECT_FAILURE = 'GET_CHAPTERS_FROM_SUBJECT_FAILURE'
+export const getChaptersFromSubject = () => ({
+  [GET_API]: {
+    types: [GET_CHAPTERS_FROM_SUBJECT_REQUEST, GET_CHAPTERS_FROM_SUBJECT_SUCCESS, GET_CHAPTERS_FROM_SUBJECT_FAILURE],
+    endpoint: '/sphinx/chapters/'
+  }
+})
 
 export const HANDLE_PREVIEW_SUBPART_REQUEST = 'HANDLE_PREVIEW_SUBPART_REQUEST'
 export const HANDLE_PREVIEW_SUBPART_SUCCESS = 'HANDLE_PREVIEW_SUBPART_SUCCESS'
