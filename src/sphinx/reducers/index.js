@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 import * as ActionTypes from '../actions'
-import { addProgrammaticAnswersToSubpart } from '../../common/utils/sphinxPreviewPayload'
+import { addProgrammaticAnswersToSubpart } from '../../common/utils/sphinxActions'
 
 const variableBase = {
   name: 'defaultName',
@@ -92,7 +92,7 @@ const mainReducer = (state = initialState, action) => {
 
       // special case to populate variables field
       if (_.has(changedField, 'variablesNumber')) {
-        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
+        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => _.cloneDeep(variableBase)) : []
       }
 
       return {
@@ -177,7 +177,7 @@ const mainReducer = (state = initialState, action) => {
 
       // special case to populate variables field
       if (_.has(changedField, 'variablesNumber')) {
-        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
+        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => _.cloneDeep(variableBase)) : []
       }
 
       return {
@@ -430,11 +430,11 @@ const mainReducer = (state = initialState, action) => {
       const { changedField, templateType } = action
 
       if (_.has(changedField, 'incorrectNumber')) {
-        changedField.incorrect = (changedField.incorrectNumber !== 0) ? [...Array(changedField.incorrectNumber).keys()].map(() => MCQAnswerBase) : []
+        changedField.incorrect = (changedField.incorrectNumber !== 0) ? [...Array(changedField.incorrectNumber).keys()].map(() => _.cloneDeep(MCQAnswerBase)) : []
       }
 
       if (_.has(changedField, 'correctNumber')) {
-        changedField.correct = (changedField.correct !== 0) ? [...Array(changedField.correctNumber).keys()].map(() => MCQAnswerBase) : []
+        changedField.correct = (changedField.correct !== 0) ? [...Array(changedField.correctNumber).keys()].map(() => _.cloneDeep(MCQAnswerBase)) : []
       }
 
       return {
@@ -484,6 +484,7 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_CHANGE_MCQ_OPTION_IMAGE_LIST: {
       const { templateType, imageList, fieldSet, index } = action
+
       const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
       MCQOptionsState[index].images = imageList
 

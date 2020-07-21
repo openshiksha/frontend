@@ -1,6 +1,6 @@
 import { POST_API } from '../../common/middlewares/postAPI'
 import { GET_API } from '../../common/middlewares/getAPI'
-import { convertSubpartToPayload } from '../../common/utils/sphinxPreviewPayload'
+import { convertSubpartToPayload, convertQuestionToPayload } from '../../common/utils/sphinxActions'
 
 export const GET_ALL_TAGS_REQUEST = 'GET_ALL_TAGS_REQUEST'
 export const GET_ALL_TAGS_SUCCESS = 'GET_ALL_TAGS_SUCCESS'
@@ -53,7 +53,7 @@ export const handleSubmitQuestion = (question) => ({
     types: [HANDLE_SUBMIT_QUESTION_REQUEST, HANDLE_SUBMIT_QUESTION_SUCCESS, HANDLE_SUBMIT_QUESTION_FAILURE],
     endpoint: '/sphinx/submit/',
     payload: {
-      question
+      question: convertQuestionToPayload(question)
     }
   }
 })

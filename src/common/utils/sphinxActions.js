@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const templateTypeToBackendTypeMap = {
   MCSAQ: 1,
   MCMAQ: 2,
@@ -53,6 +55,68 @@ const getVariableKeyforBackend = (variable) => {
   }
 }
 
+const changeMCQArrayForBackend = (MCQArray) => {
+  const modifiedArray = []
+  MCQArray.forEach((element, index) => {
+    const modifiedElement = {
+      text: element.text,
+      img: element.images?.[0]?.name
+    }
+    modifiedArray.push(modifiedElement)
+  })
+  return modifiedArray
+}
+
+const returnImageKeyForMCQImages = (MCQArray) => {
+  const imageArray = {}
+  MCQArray.forEach((element, index) => {
+    if (element.images?.[0]?.name) {
+      imageArray[`${element.images?.[0]?.name}`] = element.images?.[0]?.thumbUrl
+    }
+  })
+  return imageArray
+}
+
+// TODO: Support multiple images via sphinx
+const getAllImageKeysForSubpartBackendStorage = (subpart) => {
+  const refinedSubpart = _.cloneDeep(subpart)
+  let allImages = {}
+  const {
+    hintImages,
+    contentImages,
+    solutionImages,
+    correctAnswer,
+    templateType
+  } = refinedSubpart
+
+  if (templateType === 'MCSAQ') {
+    allImages = {
+      ...allImages,
+      ...returnImageKeyForMCQImages(correctAnswer.MCSAQ.correct),
+      ...returnImageKeyForMCQImages(correctAnswer.MCSAQ.incorrect)
+    }
+  } else if (templateType === 'MCMAQ') {
+    allImages = {
+      ...allImages,
+      ...returnImageKeyForMCQImages(correctAnswer.MCMAQ.correct),
+      ...returnImageKeyForMCQImages(correctAnswer.MCMAQ.incorrect)
+    }
+  }
+  if (hintImages?.[0]?.name) {
+    allImages[`${hintImages?.[0]?.name}`] = hintImages?.[0]?.thumbUrl
+  }
+
+  if (solutionImages?.[0]?.name) {
+    allImages[`${solutionImages?.[0]?.name}`] = solutionImages?.[0]?.thumbUrl
+  }
+
+  if (contentImages?.[0]?.name) {
+    allImages[`${contentImages?.[0]?.name}`] = contentImages?.[0]?.thumbUrl
+  }
+
+  return allImages
+}
+
 const getAnswerKeyforBackend = (correctAnswer, templateType) => {
   switch (templateType) {
     case 'textual': {
@@ -73,16 +137,19 @@ const getAnswerKeyforBackend = (correctAnswer, templateType) => {
       return {
         options: {
           use_dropdown_widget: correctAnswer.MCSAQ.format === 'dropdown' ? true : undefined,
-          correct: correctAnswer.MCSAQ.correct[0],
-          incorrect: correctAnswer.MCSAQ.incorrect
+          correct: {
+            text: correctAnswer.MCSAQ.correct[0].text,
+            img: correctAnswer.MCSAQ.correct[0].images?.[0]?.name
+          },
+          incorrect: changeMCQArrayForBackend(correctAnswer.MCSAQ.incorrect)
         }
       }
     }
     case 'MCMAQ': {
       return {
         options: {
-          correct: correctAnswer.MCMAQ.correct,
-          incorrect: correctAnswer.MCMAQ.incorrect
+          correct: changeMCQArrayForBackend(correctAnswer.MCMAQ.correct),
+          incorrect: changeMCQArrayForBackend(correctAnswer.MCMAQ.incorrect)
         }
       }
     }
@@ -91,9 +158,57 @@ const getAnswerKeyforBackend = (correctAnswer, templateType) => {
   }
 }
 
+export const convertQuestionToPayload = (questionCreator) => {
+  const {
+    content: contentText,
+    hint: hintText,
+    tags,
+    board,
+    language,
+    standard,
+    chapter,
+    subject,
+    subparts
+  } = questionCreator
+
+  // required to change payload
+  let allImages = {}
+  const modifiedSubparts = []
+  subparts.forEach((subpart) => {
+    const modifiedSubpart = convertSubpartToPayload(subpart)
+    const subpartImages = getAllImageKeysForSubpartBackendStorage(subpart)
+    allImages = {
+      ...allImages,
+      ...subpartImages
+    }
+    modifiedSubparts.push(modifiedSubpart)
+  })
+
+  return {
+    subparts: modifiedSubparts,
+    all_images: allImages,
+    content: {
+      text: contentText
+    },
+    hint: {
+      text: hintText
+    },
+    tags,
+    board,
+    language,
+    standard,
+    subject,
+    chapter,
+    school: 1 // hardcoded to openshiksha for now.
+  }
+}
+
 export const convertSubpartToPayload = (subpart) => {
   const {
     hintText,
+    hintImages,
+    solutionImages,
+    contentImages,
     solutionText,
     contentText,
     index,
@@ -111,13 +226,16 @@ export const convertSubpartToPayload = (subpart) => {
   })
   return {
     hint: {
-      text: hintText
+      text: hintText,
+      img: hintImages?.[0]?.name
     },
     solution: {
-      text: solutionText
+      text: solutionText,
+      img: solutionImages?.[0]?.name
     },
     content: {
-      text: contentText
+      text: contentText,
+      img: contentImages?.[0]?.name
     },
     subpart_index: index,
     type: templateTypeToBackendTypeMap[templateType],

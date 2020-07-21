@@ -146,7 +146,7 @@ class QuestionCreator extends React.Component {
             }
           </Select>
           <span className='margin--sides' > Chapter: </span>
-          <Select value={chapter} style={{ width: 120 }} onChange={(value) => this.onChange('chapter', value)}>
+          <Select value={chapter} style={{ width: 240 }} onChange={(value) => this.onChange('chapter', value)}>
             {
               chapterData.map((chapter, chapterIndex) => {
                 return (
