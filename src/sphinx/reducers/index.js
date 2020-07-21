@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 import * as ActionTypes from '../actions'
+import { addProgrammaticAnswersToSubpart } from '../../common/utils/sphinxActions'
 
 const variableBase = {
   name: 'defaultName',
@@ -59,7 +60,8 @@ const initialState = {
           tolerance: '',
           unit: ''
         }
-      }
+      },
+      tags: []
     },
     subparts: [],
     tableSubparts: [],
@@ -69,7 +71,18 @@ const initialState = {
     previewType: '',
     subpartPreview: {},
     questionPreview: [],
-    showPreviewQuestionItem: false
+    showPreviewQuestionItem: false,
+    content: '',
+    hint: '',
+    tags: [],
+    board: 1, // will give a drop down eventually,
+    language: 1, // will be a dropdown eventually
+    standard: '',
+    subject: '',
+    chapter: '',
+    subjectData: [],
+    chapterData: [],
+    tagsData: []
   }
 }
 
@@ -80,7 +93,7 @@ const mainReducer = (state = initialState, action) => {
 
       // special case to populate variables field
       if (_.has(changedField, 'variablesNumber')) {
-        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
+        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => _.cloneDeep(variableBase)) : []
       }
 
       return {
@@ -99,12 +112,73 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
+    case ActionTypes.ON_CHANGE_QUESTION_CREATOR_FIELD: {
+      const { changedField } = action
+
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          questionErrorText: '',
+          questionSuccessText: '',
+          previewType: '',
+          subpartPreview: {},
+          ...changedField
+        }
+      }
+    }
+
+    case ActionTypes.GET_ALL_TAGS_SUCCESS: {
+      const {
+        tags
+      } = action.response.payload
+
+      const parsedTags = JSON.parse(tags)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          tagsData: parsedTags
+        }
+      }
+    }
+
+    case ActionTypes.GET_SUBJECTS_FROM_STANDARD_SUCCESS: {
+      const {
+        subjects
+      } = action.response.payload
+
+      const parsedSubjects = JSON.parse(subjects)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subjectData: parsedSubjects
+        }
+      }
+    }
+
+    case ActionTypes.GET_CHAPTERS_FROM_SUBJECT_SUCCESS: {
+      const {
+        chapters
+      } = action.response.payload
+
+      const parsedChapters = JSON.parse(chapters)
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          chapterData: parsedChapters
+        }
+      }
+    }
+
     case ActionTypes.ON_CHANGE_SUBPART_ANSWER_SELECTOR_FIELD: {
       const { changedField } = action
 
       // special case to populate variables field
       if (_.has(changedField, 'variablesNumber')) {
-        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => variableBase) : []
+        changedField.variables = (changedField.variablesNumber !== 0) ? [...Array(changedField.variablesNumber).keys()].map(() => _.cloneDeep(variableBase)) : []
       }
 
       return {
@@ -146,7 +220,7 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_CHANGE_IMAGE_LIST : {
       const { imageList, imageType } = action
-      const subpartCreatorState = state.questionCreator.subpartCreator
+      const subpartCreatorState = _.cloneDeep(state.questionCreator.subpartCreator)
       subpartCreatorState[imageType] = imageList
       return {
         ...state,
@@ -217,11 +291,34 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         questionCreator: {
           ...state.questionCreator,
-          subpartCreator: initialState.questionCreator.subpartCreator,
+          subpartCreator: _.cloneDeep(initialState.questionCreator.subpartCreator),
           subparts,
           tableSubparts,
           questionSuccessText: isEditing ? 'You have successfully edited the subpart' : 'You have successfully added the subpart to the question',
           editMode: false
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_SUBMIT_QUESTION_SUCCESS: {
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          subparts: [],
+          tableSubparts: [],
+          questionSuccessText: 'Successfully submitted question',
+          subpartCreator: _.cloneDeep(initialState.questionCreator.subpartCreator)
+        }
+      }
+    }
+
+    case ActionTypes.HANDLE_SUBMIT_QUESTION_FAILURE: {
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          questionErrorText: 'Error in submitting the question'
         }
       }
     }
@@ -273,35 +370,13 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.HANDLE_PREVIEW_SUBPART_SUCCESS: {
       const {
-        hint: {
-          text: hintText
-        },
-        solution: {
-          text: solutionText
-        },
-        content: {
-          text: contentText
-        },
         subpartIndex
       } = action.response.payload
 
-      const {
-        previewType,
-        subpartCreator,
-        questionPreview,
-        subparts
-      } = state.questionCreator
-      let subpartPreview = subpartCreator
-      if (previewType === 'question') {
-        subpartPreview = subparts[subpartIndex]
-      }
+      const question = _.cloneDeep(state.questionCreator)
+      const subpartPreview = addProgrammaticAnswersToSubpart(question, action.response.payload)
 
-      subpartPreview = {
-        ...subpartPreview,
-        hintText,
-        contentText,
-        solutionText
-      }
+      const questionPreview = state.questionCreator.questionPreview
       questionPreview[subpartIndex] = subpartPreview
       return {
         ...state,
@@ -336,8 +411,8 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_REMOVE_IMAGE_FROM_IMAGE_LIST: {
       const { imageType, removedFile } = action
-      const subpartCreatorState = state.questionCreator.subpartCreator
-      const newImageList = state.questionCreator.subpartCreator[imageType].filter((file) => {
+      const subpartCreatorState = _.cloneDeep(state.questionCreator.subpartCreator)
+      const newImageList = subpartCreatorState[imageType].filter((file) => {
         return file.uid !== removedFile.uid
       })
       subpartCreatorState[imageType] = newImageList
@@ -352,7 +427,7 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_REMOVE_MCQ_OPTION_IMAGE: {
       const { templateType, removedFile, fieldSet, index } = action
-      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+      const MCQOptionsState = _.cloneDeep(state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet])
       const newImageList = MCQOptionsState[index].images.filter((file) => {
         return file.uid !== removedFile.uid
       })
@@ -379,11 +454,11 @@ const mainReducer = (state = initialState, action) => {
       const { changedField, templateType } = action
 
       if (_.has(changedField, 'incorrectNumber')) {
-        changedField.incorrect = (changedField.incorrectNumber !== 0) ? [...Array(changedField.incorrectNumber).keys()].map(() => MCQAnswerBase) : []
+        changedField.incorrect = (changedField.incorrectNumber !== 0) ? [...Array(changedField.incorrectNumber).keys()].map(() => _.cloneDeep(MCQAnswerBase)) : []
       }
 
       if (_.has(changedField, 'correctNumber')) {
-        changedField.correct = (changedField.correct !== 0) ? [...Array(changedField.correctNumber).keys()].map(() => MCQAnswerBase) : []
+        changedField.correct = (changedField.correct !== 0) ? [...Array(changedField.correctNumber).keys()].map(() => _.cloneDeep(MCQAnswerBase)) : []
       }
 
       return {
@@ -433,7 +508,8 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_CHANGE_MCQ_OPTION_IMAGE_LIST: {
       const { templateType, imageList, fieldSet, index } = action
-      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+
+      const MCQOptionsState = _.cloneDeep(state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet])
       MCQOptionsState[index].images = imageList
 
       return {

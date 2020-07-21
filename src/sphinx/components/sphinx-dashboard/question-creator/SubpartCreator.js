@@ -32,13 +32,14 @@ class SubpartCreator extends React.Component {
       imagePreviewTitle,
       imagePreviewVisible,
       previewImage,
-      correctAnswer
+      correctAnswer,
+      tags
     } = this.props.subpart
 
     const isEditing = this.props.editMode
 
     return (
-      <Row name='subpartCreator' className='width-100 padding-double--bottom'>
+      <Row name='subpartCreator' className='width-100'>
         <Col span={12} >
           <div className='f18 margin--bottom'>Subpart Creator</div>
           <div>
@@ -62,7 +63,17 @@ class SubpartCreator extends React.Component {
               }
             </Select>
           </div>
-          <div>
+          <span className='margin--ends' > Tags: </span>
+          <Select mode="multiple" style={{ width: '100%' }} value={tags} placeholder="Please select the tags required" onChange={(value) => this.onChange('tags', value)}>
+            {
+              this.props.tagsData.map((tag, tagIndex) => {
+                return (
+                  <Option key={tagIndex} value={tag.name}>{tag.name}</Option>
+                )
+              })
+            }
+          </Select>
+          <div className='margin--top'>
             <span> Question Text: </span>
             <TextArea row={4} value={contentText} onChange={(e) => this.onChange('contentText', e.target.value)}/>
           </div>
@@ -176,7 +187,8 @@ SubpartCreator.propTypes = {
   onRemoveMCQOptionImage: PropTypes.func.isRequired,
   onChangeAnswerSelectorField: PropTypes.func.isRequired,
   handlePreviewSubpart: PropTypes.func.isRequired,
-  handleSetPreviewType: PropTypes.func.isRequired
+  handleSetPreviewType: PropTypes.func.isRequired,
+  tagsData: PropTypes.array.isRequired
 }
 
 export default SubpartCreator
