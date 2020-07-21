@@ -207,7 +207,7 @@ class QuestionCreator extends React.Component {
             }))
             this.props.handleShowQuestionPreview()
           }}> Preview Question </Button>
-          <Button className='margin--sides background-green text-white' onClick={() => this.props.handleSubmitQuestion()}> Submit Question </Button>
+          <Button className='margin--sides background-green text-white' onClick={() => this.props.handleSubmitQuestion(this.props.questionCreator)}> Submit Question </Button>
         </Col>
       </Row>
     )

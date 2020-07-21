@@ -299,6 +299,23 @@ const mainReducer = (state = initialState, action) => {
       }
     }
 
+    case ActionTypes.HANDLE_SUBMIT_QUESTION_SUCCESS: {
+      return {
+        ...state,
+        questionCreator: initialState.questionCreator
+      }
+    }
+
+    case ActionTypes.HANDLE_SUBMIT_QUESTION_FAILURE: {
+      return {
+        ...state,
+        questionCreator: {
+          ...state.questionCreator,
+          questionErrorText: 'Error in submitting the question'
+        }
+      }
+    }
+
     case ActionTypes.HANDLE_CLOSE_PREVIEW_WINDOW: {
       return {
         ...state,
