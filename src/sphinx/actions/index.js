@@ -51,7 +51,7 @@ export const HANDLE_SUBMIT_QUESTION_FAILURE = 'HANDLE_SUBMIT_QUESTION_FAILURE'
 export const handleSubmitQuestion = (question) => ({
   [POST_API]: {
     types: [HANDLE_SUBMIT_QUESTION_REQUEST, HANDLE_SUBMIT_QUESTION_SUCCESS, HANDLE_SUBMIT_QUESTION_FAILURE],
-    endpoint: '/sphinx/submit/',
+    endpoint: '/sphinx/question/',
     payload: {
       question: convertQuestionToPayload(question)
     }

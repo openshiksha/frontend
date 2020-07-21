@@ -38,7 +38,7 @@ class SubpartCreator extends React.Component {
     const isEditing = this.props.editMode
 
     return (
-      <Row name='subpartCreator' className='width-100 padding-double--bottom'>
+      <Row name='subpartCreator' className='width-100'>
         <Col span={12} >
           <div className='f18 margin--bottom'>Subpart Creator</div>
           <div>
