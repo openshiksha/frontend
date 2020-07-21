@@ -60,7 +60,8 @@ const initialState = {
           tolerance: '',
           unit: ''
         }
-      }
+      },
+      tags: []
     },
     subparts: [],
     tableSubparts: [],
@@ -219,7 +220,7 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_CHANGE_IMAGE_LIST : {
       const { imageList, imageType } = action
-      const subpartCreatorState = state.questionCreator.subpartCreator
+      const subpartCreatorState = _.cloneDeep(state.questionCreator.subpartCreator)
       subpartCreatorState[imageType] = imageList
       return {
         ...state,
@@ -290,7 +291,7 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         questionCreator: {
           ...state.questionCreator,
-          subpartCreator: initialState.questionCreator.subpartCreator,
+          subpartCreator: _.cloneDeep(initialState.questionCreator.subpartCreator),
           subparts,
           tableSubparts,
           questionSuccessText: isEditing ? 'You have successfully edited the subpart' : 'You have successfully added the subpart to the question',
@@ -302,7 +303,13 @@ const mainReducer = (state = initialState, action) => {
     case ActionTypes.HANDLE_SUBMIT_QUESTION_SUCCESS: {
       return {
         ...state,
-        questionCreator: initialState.questionCreator
+        questionCreator: {
+          ...state.questionCreator,
+          subparts: [],
+          tableSubparts: [],
+          questionSuccessText: 'Successfully submitted question',
+          subpartCreator: _.cloneDeep(initialState.questionCreator.subpartCreator)
+        }
       }
     }
 
@@ -404,8 +411,8 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_REMOVE_IMAGE_FROM_IMAGE_LIST: {
       const { imageType, removedFile } = action
-      const subpartCreatorState = state.questionCreator.subpartCreator
-      const newImageList = state.questionCreator.subpartCreator[imageType].filter((file) => {
+      const subpartCreatorState = _.cloneDeep(state.questionCreator.subpartCreator)
+      const newImageList = subpartCreatorState[imageType].filter((file) => {
         return file.uid !== removedFile.uid
       })
       subpartCreatorState[imageType] = newImageList
@@ -420,7 +427,7 @@ const mainReducer = (state = initialState, action) => {
 
     case ActionTypes.ON_REMOVE_MCQ_OPTION_IMAGE: {
       const { templateType, removedFile, fieldSet, index } = action
-      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+      const MCQOptionsState = _.cloneDeep(state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet])
       const newImageList = MCQOptionsState[index].images.filter((file) => {
         return file.uid !== removedFile.uid
       })
@@ -502,7 +509,7 @@ const mainReducer = (state = initialState, action) => {
     case ActionTypes.ON_CHANGE_MCQ_OPTION_IMAGE_LIST: {
       const { templateType, imageList, fieldSet, index } = action
 
-      const MCQOptionsState = state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet]
+      const MCQOptionsState = _.cloneDeep(state.questionCreator.subpartCreator.correctAnswer[templateType][fieldSet])
       MCQOptionsState[index].images = imageList
 
       return {

@@ -214,7 +214,8 @@ export const convertSubpartToPayload = (subpart) => {
     index,
     templateType,
     variables,
-    correctAnswer
+    correctAnswer,
+    tags
   } = subpart
 
   let variableConstraints = {}
@@ -240,7 +241,8 @@ export const convertSubpartToPayload = (subpart) => {
     subpart_index: index,
     type: templateTypeToBackendTypeMap[templateType],
     variable_constraints: variableConstraints,
-    ...getAnswerKeyforBackend(correctAnswer, templateType)
+    ...getAnswerKeyforBackend(correctAnswer, templateType),
+    tags
   }
 }
 

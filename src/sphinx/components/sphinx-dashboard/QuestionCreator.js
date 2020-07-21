@@ -177,6 +177,7 @@ class QuestionCreator extends React.Component {
           </Select>
           <Card className='margin--ends'>
             <SubpartCreator
+              tagsData={tagsData}
               editMode={editMode}
               onChangeSubpartCreatorField={(changedField) => this.props.onChangeSubpartCreatorField(changedField)}
               onChangeVariableCreatorField={(changedIndex, changedField) => this.props.onChangeVariableCreatorField(changedIndex, changedField)}
