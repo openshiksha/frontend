@@ -44,8 +44,9 @@ jobs:
               with:
                 registry-url: 'https://npm.pkg.github.com'
                 node-version: '13'
-            - name: Initialize Yarn
-              run: yarn
+            - name: Extract branch name
+              run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+              id: extract_branch
             - name: Publish to Github Packages
               run: yarn publish
               env:
