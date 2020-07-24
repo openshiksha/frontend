@@ -20,8 +20,8 @@ jobs:
               run: yarn test
             - name: Build Artifacts
               run: yarn build
-            - name: Add package.json to build artifact
-              run: cp package.json build/
+            - name: Add minimal package.json to Build Artifact
+              run: cat package.json | jq '.dependencies={}' | jq '.devDependencies={}' | tee build/package.json
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
