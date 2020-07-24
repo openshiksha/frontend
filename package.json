@@ -1,5 +1,5 @@
 {
-  "name": "@openshiksha/frontend",
+  "name": "@openshiksha/frontend-qa",
   "version": "0.2.2",
   "proxy": "http://localhost:8000",
   "dependencies": {
