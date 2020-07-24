@@ -1,6 +1,10 @@
 # Openshiksha Frontend
-A server setup for Frontend Content
+Dev server setup for Frontend App
 
+| ENV | Status |
+| --- | --- |
+| QA | ![](https://github.com/openshiksha/frontend/workflows/CI/CD%20Pipeline/badge.svg?branch=qa) |
+| PROD | ![](https://github.com/openshiksha/frontend/workflows/CI/CD%20Pipeline/badge.svg?branch=prod) |
 
 ### Setup
 
