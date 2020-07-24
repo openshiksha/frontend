@@ -51,7 +51,7 @@ jobs:
               run: echo "##[set-output name=package;]$(echo `jq '.name' package.json -r`)" 
               id: extract_package
             - name: Update Package Name to reflect Branch
-              run: cat package.json | jq '.name=${{ steps.extract_package.outputs.package }}-${{ steps.extract_branch.outputs.branch }}' | tee package.json
+              run: cat package.json | jq '.name="${{ steps.extract_package.outputs.package }}-${{ steps.extract_branch.outputs.branch }}"' | tee p.json && mv p.json package.json
             - name: Publish to Github Packages
               run: yarn publish
               env:
