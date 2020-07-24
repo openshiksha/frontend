@@ -2,6 +2,10 @@
   "name": "@openshiksha/frontend",
   "version": "0.2.3",
   "proxy": "http://localhost:8000",
+  "repository" : {
+    "type" : "git",
+    "url": "ssh://git@github.com/openshiksha/frontend.git"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@testing-library/jest-dom": "^4.2.4",
