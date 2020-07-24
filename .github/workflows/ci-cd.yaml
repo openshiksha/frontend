@@ -39,9 +39,11 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                 name: build
-            - name: List Artifact contents
-              run: ls && ls build
-            - name: Unzip Build Artifact
-              run: unzip build.zip -d build
-            - name: List Artifact contents
-              run: ls && ls build
+            - uses: actions/setup-node@v2-beta
+              with:
+                registry-url: 'https://npm.pkg.github.com'
+                node-version: '13'
+            - run: yarn publish
+                env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              
