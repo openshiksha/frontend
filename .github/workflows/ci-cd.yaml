@@ -48,7 +48,7 @@ jobs:
               run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
               id: extract_branch
             - name: Publish to Github Packages
-              run: yarn publish
+              run: yarn publish --tag ${{ steps.extract_branch.outputs.branch }}
               env:
                 NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               
