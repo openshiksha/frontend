@@ -12,8 +12,6 @@ jobs:
               uses: actions/setup-node@v2-beta
               with:
                 node-version: '13'
-            - name: Install Yarn
-              run: npm install -g yarn
             - name: Install Dependencies
               run: yarn install
             - name: Lint
@@ -22,6 +20,8 @@ jobs:
               run: yarn test
             - name: Build Artifacts
               run: yarn build
+            - name: Add package.json to build artifact
+              run: cp package.json build/
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
