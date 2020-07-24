@@ -1,4 +1,4 @@
-import { camelCaseKeys } from '../utils'
+import { camelCaseKeys, isAuthenticationRedirectResponse, performAuthenticationRedirect } from '../utils'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -7,6 +7,10 @@ function getApi (endpoint) {
     credentials: 'same-origin'
   })
     .then(response => {
+      // catch any authentication redirects and redirect entire page to login screen
+      if (isAuthenticationRedirectResponse(response)) {
+        performAuthenticationRedirect()
+      }
       return response.json().then(json => ({ json, response })).catch(() => {
         if (response.ok) {
           return Promise.resolve({ response })

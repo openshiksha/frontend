@@ -88,3 +88,28 @@ export const getBase64 = (file) => {
     reader.onerror = error => reject(error)
   })
 }
+
+export const isAuthenticationRedirectResponse = (response) => {
+  const { origin } = window.location
+  const { status, redirected, url } = response
+  return status === 200 &&
+    redirected &&
+    url.startsWith(origin) &&
+    url.replace(origin, '').startsWith('/login')
+}
+
+export const isAuthenticationRedirectXMLHTTP = (request) => {
+  const { origin } = window.location
+  const { responseURL, status } = request
+  return status === 200 &&
+    responseURL.startsWith(origin) &&
+    responseURL.replace(origin, '').startsWith('/login')
+}
+
+export const performAuthenticationRedirect = () => {
+  if (process.env.NODE_ENV === 'development') {
+    window.location.replace(`http://localhost:8000/login/?next=${window.location.href}`)
+  } else {
+    window.location.replace(`/login/?next=${window.location.pathname}`)
+  }
+}

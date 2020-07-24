@@ -1,5 +1,5 @@
 
-import { camelCaseKeys, getCookie, snakeCaseKeys } from '../utils'
+import { camelCaseKeys, getCookie, snakeCaseKeys, performAuthenticationRedirect, isAuthenticationRedirectXMLHTTP } from '../utils'
 
 function handle400AndAbove (request, reject) {
   const { status, responseText } = request
@@ -40,6 +40,11 @@ export function postApi ({ endpoint, payload, method = 'POST', payloadAsIs, skip
     }
     request.setRequestHeader('Content-type', 'application/json')
     request.onload = () => {
+      // catch any authentication errors and redirect to login screen
+      if (isAuthenticationRedirectXMLHTTP(request)) {
+        performAuthenticationRedirect()
+      }
+
       if (request.status >= 200 && request.status < 400) {
         handle200To400(request, resolve)
       } else {

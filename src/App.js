@@ -10,8 +10,10 @@ import {
 } from 'react-router-dom'
 import SphinxBase from './sphinx/components/SphinxBase'
 
+export const APP_ROOT = '/app'
+
 const App = () => (
-  <Router>
+  <Router basename={APP_ROOT}>
     <div className='height-100'>
       <Switch>
         <Route path="/sphinx" component={SphinxBase} />
