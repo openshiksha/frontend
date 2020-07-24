@@ -1,6 +1,6 @@
 {
   "name": "@openshiksha/frontend-qa",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "proxy": "http://localhost:8000",
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
