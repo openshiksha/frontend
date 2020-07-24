@@ -28,11 +28,11 @@ jobs:
                 name: build
                 path: build
               
-    publish:
+    publish-qa:
         name: Publish
         needs: CI
-        # only run this on qa & prod branches
-        if: github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/prod'
+        # only run this on qa branch
+        if: github.ref == 'refs/heads/qa'
         runs-on: ubuntu-latest
         steps:
             - name: Download Artifact from CI Job
@@ -44,11 +44,29 @@ jobs:
               with:
                 registry-url: 'https://npm.pkg.github.com'
                 node-version: '13'
-            - name: Extract Branch name for tagging
-              run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-              id: extract_branch
             - name: Publish to Github Packages
-              run: yarn publish --tag ${{ steps.extract_branch.outputs.branch }}
+              run: yarn publish --tag qa
               env:
                 NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    add-prod-tag:
+      name: Tag Prod Version
+      needs: CI
+      # only run this on prod branch
+      if: github.ref == 'refs/heads/prod'
+      runs-on: ubuntu-latest
+      steps:
+          - name: Download Artifact from CI Job
+            uses: actions/download-artifact@v2
+            with:
+              name: build
+          - name: Setup Node Runtime
+            uses: actions/setup-node@v2-beta
+            with:
+              registry-url: 'https://npm.pkg.github.com'
+              node-version: '13'
+          - name: Tag Published Version
+            run: yarn tag add @openshiksha/frontend@`jq '.version' package.json` prod
+            env:
+              NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               
