@@ -1,6 +1,6 @@
 {
   "name": "@openshiksha/frontend",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "proxy": "http://localhost:8000",
   "repository": {
     "type": "git",
