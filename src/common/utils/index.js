@@ -108,7 +108,7 @@ export const isAuthenticationRedirectXMLHTTP = (request) => {
 
 export const performAuthenticationRedirect = () => {
   if (process.env.NODE_ENV === 'development') {
-    window.location.replace(`http://localhost:8000/login/?next=${window.location.href}`)
+    window.location.replace(`http://${window.location.hostname}:8000/login/?next=${window.location.href}`)
   } else {
     window.location.replace(`/login/?next=${window.location.pathname}`)
   }
