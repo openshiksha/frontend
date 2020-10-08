@@ -67,6 +67,18 @@ const changeMCQArrayForBackend = (MCQArray) => {
   return modifiedArray
 }
 
+const changeMCQArrayForFrontend = (MCQArray, imageDict) => {
+  const modifiedArray = []
+  MCQArray.forEach((element, index) => {
+    const modifiedElement = {
+      text: element.text,
+      img: imageDict[element.img]
+    }
+    modifiedArray.push(modifiedElement)
+  })
+  return modifiedArray
+}
+
 const returnImageKeyForMCQImages = (MCQArray) => {
   const imageArray = {}
   MCQArray.forEach((element, index) => {
@@ -156,6 +168,67 @@ const getAnswerKeyforBackend = (correctAnswer, templateType) => {
     default:
       return null
   }
+}
+
+const MCQAnswerBase = {
+  text: '',
+  images: []
+}
+
+export const getAnswerKeyforFrontend = (payload, templateType) => {
+  const baseCorrectAnswer = {
+    MCSAQ: {
+      format: 'radio',
+      correct: [{ ...MCQAnswerBase }],
+      incorrectNumber: 1,
+      incorrect: [{ ...MCQAnswerBase }]
+    },
+    MCMAQ: {
+      incorrectNumber: 1,
+      incorrect: [{ ...MCQAnswerBase }],
+      correctNumber: 1,
+      correct: [{ ...MCQAnswerBase }]
+    },
+    textual: {
+      text: ''
+    },
+    numerical: {
+      text: '',
+      tolerance: '',
+      unit: ''
+    }
+  }
+  switch (templateType) {
+    case 'textual': {
+      baseCorrectAnswer.textual.text = payload.answer
+      break
+    }
+    case 'numerical': {
+      baseCorrectAnswer.numerical.text = payload.answer.value
+      baseCorrectAnswer.numerical.tolerance = payload.answer.tolerenace
+      baseCorrectAnswer.numerical.unit = payload.unit
+      break
+    }
+    case 'MCSAQ': {
+      baseCorrectAnswer.MCSAQ.format = payload.options.use_dropdown_widget === true ? 'dropdown' : 'radio'
+      baseCorrectAnswer.MCSAQ.correct[0].text = payload.options.correct.text
+      // TODO: add images for the correct answer
+      baseCorrectAnswer.MCSAQ.incorrectNumber = payload.options.incorrect.length
+      baseCorrectAnswer.MCSAQ.incorrect = changeMCQArrayForFrontend(payload.options.incorrect)
+      break
+    }
+    case 'MCMAQ': {
+      baseCorrectAnswer.MCSAQ.correct = changeMCQArrayForFrontend(payload.options.correct)
+      baseCorrectAnswer.MCSAQ.correctNumber = payload.options.correct.length
+      baseCorrectAnswer.MCSAQ.incorrectNumber = payload.options.incorrect.length
+      baseCorrectAnswer.MCSAQ.incorrect = changeMCQArrayForFrontend(payload.options.incorrect)
+      break
+    }
+    default:
+      return baseCorrectAnswer
+  }
+
+  return baseCorrectAnswer
 }
 
 export const convertQuestionToPayload = (questionCreator) => {
