@@ -28,7 +28,8 @@ import {
   onChangeQuestionCreatorField,
   getAllTags,
   getSubjectsFromStandard,
-  getChaptersFromSubject
+  getChaptersFromSubject,
+  fetchQuestionsFromParams
 } from '../../actions'
 
 const { TextArea } = Input
@@ -237,7 +238,8 @@ QuestionCreator.propTypes = {
   onChangeQuestionCreatorField: PropTypes.func.isRequired,
   getAllTags: PropTypes.func.isRequired,
   getChaptersFromSubject: PropTypes.func.isRequired,
-  getSubjectsFromStandard: PropTypes.func.isRequired
+  getSubjectsFromStandard: PropTypes.func.isRequired,
+  fetchQuestionsFromParams: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ questionCreator }) => {
@@ -268,5 +270,6 @@ export default connect(
     onChangeQuestionCreatorField,
     getAllTags,
     getChaptersFromSubject,
-    getSubjectsFromStandard
+    getSubjectsFromStandard,
+    fetchQuestionsFromParams
   })(QuestionCreator)
