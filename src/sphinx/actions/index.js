@@ -78,6 +78,17 @@ export const onChangeSubpartCreatorField = (changedField) => {
   )
 }
 
+export const HANDLE_CHANGE_QUESTION_LOADER_FIELD = 'HANDLE_CHANGE_QUESTION_LOADER_FIELD'
+export const handleChangeQuestionLoader = (key, value) => {
+  return (
+    {
+      type: HANDLE_CHANGE_QUESTION_LOADER_FIELD,
+      key,
+      value
+    }
+  )
+}
+
 export const ON_CHANGE_QUESTION_CREATOR_FIELD = 'ON_CHANGE_QUESTION_CREATOR_FIELD'
 export const onChangeQuestionCreatorField = (changedField) => {
   return (

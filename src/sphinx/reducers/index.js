@@ -24,6 +24,15 @@ const MCQAnswerBase = {
 }
 
 const initialState = {
+  questionLoader: {
+    isVisible: false,
+    questionList: [],
+    board: 1,
+    standard: 8,
+    subject: '',
+    chapter: '',
+    selectedQuestionId: null
+  },
   questionCreator: {
     subpartCreator: {
       contentImages: [],
@@ -82,6 +91,7 @@ const initialState = {
     chapter: '',
     subjectData: [],
     chapterData: [],
+    schoolData: [],
     tagsData: []
   }
 }
