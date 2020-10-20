@@ -32,6 +32,16 @@ export const getChaptersFromSubject = () => ({
   }
 })
 
+export const FETCH_QUESTIONS_REQUEST = 'FETCH_QUESTIONS_REQUEST'
+export const FETCH_QUESTIONS_SUCCESS = 'FETCH_QUESTIONS_SUCCESS'
+export const FETCH_QUESTIONS_FAILURE = 'FETCH_QUESTIONS_FAILURE'
+export const fetchQuestionsFromParams = (school, standard, subject, chapter) => ({
+  [GET_API]: {
+    types: [FETCH_QUESTIONS_REQUEST, FETCH_QUESTIONS_SUCCESS, FETCH_QUESTIONS_FAILURE],
+    endpoint: `/sphinx/questions/?school=${school}&standard=${standard}&subject=${subject}&chapter=${chapter}`
+  }
+})
+
 export const HANDLE_PREVIEW_SUBPART_REQUEST = 'HANDLE_PREVIEW_SUBPART_REQUEST'
 export const HANDLE_PREVIEW_SUBPART_SUCCESS = 'HANDLE_PREVIEW_SUBPART_SUCCESS'
 export const HANDLE_PREVIEW_SUBPART_FAILURE = 'HANDLE_PREVIEW_SUBPART_FAILURE'
@@ -64,6 +74,17 @@ export const onChangeSubpartCreatorField = (changedField) => {
     {
       type: ON_CHANGE_SUBPART_CREATOR_FIELD,
       changedField
+    }
+  )
+}
+
+export const HANDLE_CHANGE_QUESTION_LOADER_FIELD = 'HANDLE_CHANGE_QUESTION_LOADER_FIELD'
+export const handleChangeQuestionLoader = (key, value) => {
+  return (
+    {
+      type: HANDLE_CHANGE_QUESTION_LOADER_FIELD,
+      key,
+      value
     }
   )
 }

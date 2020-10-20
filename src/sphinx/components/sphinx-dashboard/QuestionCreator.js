@@ -28,8 +28,11 @@ import {
   onChangeQuestionCreatorField,
   getAllTags,
   getSubjectsFromStandard,
-  getChaptersFromSubject
+  getChaptersFromSubject,
+  fetchQuestionsFromParams,
+  handleChangeQuestionLoader
 } from '../../actions'
+import QuestionLoader from './question-creator/QuestionLoader'
 
 const { TextArea } = Input
 const { Option } = Select
@@ -70,7 +73,8 @@ class QuestionCreator extends React.Component {
       chapter,
       subjectData = [],
       chapterData = [],
-      tagsData = []
+      tagsData = [],
+      schoolData = []
     } = this.props.questionCreator
 
     const showQuestionAlerts = (questionErrorText.length || questionSuccessText.length)
@@ -209,6 +213,13 @@ class QuestionCreator extends React.Component {
             this.props.handleShowQuestionPreview()
           }}> Preview Question </Button>
           <Button className='margin--sides background-green text-white' onClick={() => this.props.handleSubmitQuestion(this.props.questionCreator)}> Submit Question </Button>
+          <QuestionLoader
+            subjectData={subjectData}
+            questionLoader={this.props.questionLoader}
+            schoolData={schoolData}
+            chapterData={chapterData}
+            handleChangeQuestionLoader={(key, value) => this.props.handleChangeQuestionLoader(key, value)}
+          />
         </Col>
       </Row>
     )
@@ -217,6 +228,7 @@ class QuestionCreator extends React.Component {
 
 QuestionCreator.propTypes = {
   questionCreator: PropTypes.object.isRequired,
+  questionLoader: PropTypes.object.isRequired,
   handleSubmitQuestion: PropTypes.func.isRequired,
   onChangeSubpartCreatorField: PropTypes.func.isRequired,
   onChangeVariableCreatorField: PropTypes.func.isRequired,
@@ -237,12 +249,15 @@ QuestionCreator.propTypes = {
   onChangeQuestionCreatorField: PropTypes.func.isRequired,
   getAllTags: PropTypes.func.isRequired,
   getChaptersFromSubject: PropTypes.func.isRequired,
-  getSubjectsFromStandard: PropTypes.func.isRequired
+  getSubjectsFromStandard: PropTypes.func.isRequired,
+  fetchQuestionsFromParams: PropTypes.func.isRequired,
+  handleChangeQuestionLoader: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ questionCreator }) => {
+const mapStateToProps = ({ questionCreator, questionLoader }) => {
   return {
-    questionCreator
+    questionCreator,
+    questionLoader
   }
 }
 
@@ -268,5 +283,7 @@ export default connect(
     onChangeQuestionCreatorField,
     getAllTags,
     getChaptersFromSubject,
-    getSubjectsFromStandard
+    getSubjectsFromStandard,
+    fetchQuestionsFromParams,
+    handleChangeQuestionLoader
   })(QuestionCreator)
